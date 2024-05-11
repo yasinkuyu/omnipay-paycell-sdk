@@ -28,11 +28,4 @@
             "Omnipay\\Paycell\\": "src/"
         }
     },
-    "require": {
-        "omnipay/common": "^3"
-    },
-    "require-dev": {
-        "squizlabs/php_codesniffer": "^3"
-    },
-    "prefer-stable": true
 }
