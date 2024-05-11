@@ -1,6 +1,6 @@
-# Omnipay: Paycell
+# Omnipay: Paycell (not completed yet)
 
-** Turkcell Paycell gateway for Omnipay payment processing library **
+### Turkcell Paycell gateway for Omnipay payment processing library
 
 [![Latest Stable Version](https://poser.pugx.org/yasinkuyu/omnipay-paycell/v/stable)](https://packagist.org/packages/yasinkuyu/omnipay-paycell)
 [![Total Downloads](https://poser.pugx.org/yasinkuyu/omnipay-paycell/downloads)](https://packagist.org/packages/yasinkuyu/omnipay-paycell)
@@ -28,13 +28,13 @@ processing library for PHP 5.3+. This package implements Turkcell Paycell suppor
 
 - Test ve Prod ortamda kullanılacak değerler clienta özel entegrasyon bilgileridir. Paycell ekibi ile iletişime geçilerek bu bilgilerin temin edilmesi gerekir.
   Bu dokümandaki servislerin test edilebilmesi için aşağıdaki gibi default entegrasyon değerleri verilmiştir. İlgili parametre değerleri hem TEST hem de PREPROD ortamlarımız için geçerlidir.
-  -- Application name: PAYCELLTEST
-  -- Application password: PaycellTestPassword
-  -- Secure code: PAYCELL12345
-  -- Eulaid: 17
-  -- Merchant Code: 9998
+  - Application name: PAYCELLTEST
+  - Application password: PaycellTestPassword
+  - Secure code: PAYCELL12345
+  - Eulaid: 17
+  - Merchant Code: 9998
 
-## Gerekli Tanımlamalar
+## Gerekli Tanımlamalar
 
 - Üye İşyeri ve Sanal Pos Bankası
 
@@ -50,7 +50,7 @@ processing library for PHP 5.3+. This package implements Turkcell Paycell suppor
 - Paycell’de üye işyeri bilgileri tanımlandığında her biri üye işyeri için “Merchant Code” değeri üretilip üye işyeri ile paylaşılmaktadır. Bu değer üye işyeri sisteminde tanımlanmalı, ödeme işlemlerinde bu değer input olarak kullanılmaktadır.
   Paycell
 
-### Erişim
+### Erişim
 
 - Entegrasyon aşamasında üye işyerleri Paycell ProvisionServices API’lerine erişim için bağlanacakları test, preprod, prod server IP bilgilerini Paycell’e iletmelidir. IP yetkilendirme için Paycell’de ilgili tanımlar gerçekleştirilmelidir.
 
