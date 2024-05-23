@@ -2,7 +2,8 @@
 
 namespace Omnipay\Paycell\Message;
 
-use Omnipay\Paycell\Message\HashService;
+use Omnipay\Common\Message\AbstractRequest as OmnipayAbstractRequest;
+use Omnipay\Paycell\Helpers\HashService;
 
 /**
  * Paycell
@@ -11,8 +12,9 @@ use Omnipay\Paycell\Message\HashService;
  * 2024, insya.com
  * http://www.github.com/yasinkuyu/omnipay-paycell
  */
-class PaymentService 
+abstract class AbstractPayment extends OmnipayAbstractRequest  
 {
+
     private $prodBaseUrl = 'https://tpay.turkcell.com.tr/tpay/provision/services/restful/';
     private $prodPaymentBaseUrl = 'https://epayment.turkcell.com.tr/paymentmanagement/rest/';
 
@@ -24,44 +26,19 @@ class PaymentService
 
     private $requestData = array();
 
-    public function __construct($environment = 'prod')
+    // abstract protected function createResponse($data);
+
+    public function getEndpoint()
     {
-        if ($environment === 'prod') {
+        if ($this->getTestMode() == false) {
             $this->baseUrl = $this->prodBaseUrl;
             $this->paymentBaseUrl = $this->prodPaymentBaseUrl;
         } else {
             $this->baseUrl = $this->testBaseUrl;
             $this->paymentBaseUrl = $this->testPaymentBaseUrl;
         }
-
-        $hashService = new HashService();
-        $gateway = new \Omnipay\Paycell\Gateway();
-
-        $transactionId = $gateway->getTransactionId();
-        $transactionDateTime = $gateway->getTransactionDateTime();
-
-        // Request hash'ini oluşturmak için HashService sınıfını kullanalım
-        $requestHashData = $hashService->requestHash($transactionId, $transactionDateTime);
-        
-        // Response hash'ini oluşturmak için HashService sınıfını kullanalım
-        $responseHashData = $hashService->responseHash(
-            'transactionId',
-            'responseDateTime',
-            'responseCode',
-            'cardToken'
-        );
-        
-        $this->requestData = [
-            "header" => [
-                "applicationName" => $gateway->getApplicationName(),
-                "transactionId" => $transactionId,
-                "transactionDateTime" => $transactionDateTime
-            ],
-            "hashData" => $requestHashData
-        ];
-
     }
-
+  
     // Provision Services
     /**
      * Get cards information.
@@ -105,12 +82,47 @@ class PaymentService
 
     /**
      * Provision a payment.
-     *
+     * 
+     * Kart numarası girilerek yapılan 3D doğrulama olmadan ödeme: getCardTokenSecure + provision
+     * Kart numarası girilerek yapılan 3D doğrulama ile ödeme: getCardTokenSecure + (getThreeDSession + provision)
+     * 
+     * Servis inputunda yer alan hashdata oluşturulmasında kullanılan parametreler “backend” tarafında tutulmalı ve hashdata “backend” 
+     * üzerinde oluşturularak uygulama/client’a bildirilmelidir. getCardTokenSecure servisi doğrudan uygulama/client tarafından ilgili 
+     * parametreler ile çağrılmalıdır. 
+     * Implementasyon kullanıcı arayüzü olarak web sayfası kullanıyorsa cross-origin hatasının alınmasınının engellenmesi için 
+     * üye işyeri domain bilgileri Paycell’e iletilmelidir ve Paycell’de yetki tanımlaması yapılmalıdır. Kullanıcı arayüzü mobil uygulama 
+     * için herhangi bir tanıma gerek bulunmamaktadır.
+     * 
      * @param array $data
      * @return mixed
      */
     public function provision($data)
     {
+
+        $this->validate( 'card');
+
+        $card = $this->getCard();
+        
+        $this->requestData = [
+            "requestHeader" => [
+                "applicationName" => $this->getApplicationName(),
+                "applicationPwd" => $this->getApplicationPwd(),
+                "clientIPAddress" => $this->getClientIPAddress(),
+                "transactionDateTime" => $this->getTransactionDateTime(),
+                "transactionId" => $this->getTransactionId()
+            ],
+
+            "amount" => $this->getAmountInteger(),
+            "currency" => $this->getCurrency(),
+
+            'paymentSecurity' => 'THREED_SECURE', // THREED_SECURE or NON_THREED_SECURE
+            "paymentType" => $this->actionType,
+            "msisdn" => $this->getMsisdn(),
+            "referenceNumber" => $this->getReferenceNumber(),
+            "merchantCode" => $this->getMerchantCode(),
+            
+        ];
+ 
         return $this->sendRequest('getCardToken/provision/', $data);
     }
 
@@ -165,6 +177,28 @@ class PaymentService
      */
     public function getThreeDSession($data)
     {
+        
+        $this->requestData = [
+            "requestHeader" => [
+                "applicationName" => $this->getApplicationName(),
+                "applicationPwd" => $this->getApplicationPwd(),
+                "clientIPAddress" => $this->getClientIPAddress(),
+                "transactionDateTime" => $this->getTransactionDateTime(),
+                "transactionId" => $this->getTransactionId()
+            ],
+
+            "amount" => $this->getAmountInteger(),
+            "currency" => $this->getCurrency(),
+            "installmentCount" => null, // null required
+
+            "merchantCode" => $this->getMerchantCode(),
+            "msisdn" => $this->getMsisdn(),
+            "referenceNumber" => null, // null required
+            "target" => 'MERCHANT', 
+            "transactionType" => 'AUTH', 
+
+        ];
+ 
         return $this->sendRequest('getCardToken/getThreeDSession/', $data);
     }
 
@@ -176,6 +210,29 @@ class PaymentService
      */
     public function getThreeDSessionResult($data)
     {
+
+        $this->requestData = [
+            "requestHeader" => [
+                "applicationName" => $this->getApplicationName(),
+                "applicationPwd" => $this->getApplicationPwd(),
+                "clientIPAddress" => $this->getClientIPAddress(),
+                "transactionDateTime" => $this->getTransactionDateTime(),
+                "transactionId" => $this->getTransactionId()
+            ],
+
+            "amount" => $this->getAmountInteger(),
+            "currency" => $this->getCurrency(),
+            "installmentCount" => null, // null required
+
+            "merchantCode" => $this->getMerchantCode(),
+            "msisdn" => $this->getMsisdn(),
+            "referenceNumber" => null, // null required
+            "target" => 'MERCHANT', 
+            "transactionType" => 'AUTH', 
+
+        ];
+ 
+ 
         return $this->sendRequest('getCardToken/getThreeDSessionResult/', $data);
     }
 
@@ -314,27 +371,126 @@ class PaymentService
     */
     public function getCardTokenSecure()
     {
+        $this->validate( 'card');
+
+        $hashService = new HashService();
+
+        $transactionDateTime =  $this->getTransactionDateTime();
+        $transactionId = $this->getTransactionId();
+
+        $requestHashData = $hashService->requestHash($transactionId, $transactionDateTime);
+        
+        $card = $this->getCard();
+
+        $this->requestData = [
+            "header" => [
+                "applicationName" =>  $this->getApplicationName(),
+                "transactionId" => $transactionId,
+                "transactionDateTime" => $transactionDateTime
+            ],
+            "hashData" => $requestHashData,
+
+            "creditCardNo" => $card->getNumber(),
+            "expireDateMonth" => $card->getExpiryDate('m'),
+            "expireDateYear" => $card->getExpiryDate('Y'),
+            "cvcNo" => $card->getCvv()
+        ];
+
+
         return $this->sendRequestPayment('getCardTokenSecure');
     }
 
     // 3D Redirect Page
-    public function threeDSecure()
+    public function threeDSecure($data)
     {
-        return $this->sendRequestPayment('threeDSecure');
-    }
+        $this->requestData = [
+            "requestHeader" => [
+                "applicationName" => $this->getApplicationName(),
+                "applicationPwd" => $this->getApplicationPwd(),
+                "clientIPAddress" => $this->getClientIPAddress(),
+                "transactionDateTime" => $this->getTransactionDateTime(),
+                "transactionId" => $this->getTransactionId()
+            ],
 
+            "amount" => $this->getAmountInteger(),
+            "currency" => $this->getCurrency(),
+            "installmentCount" => null, // null required
+
+            "merchantCode" => $this->getMerchantCode(),
+            "msisdn" => $this->getMsisdn(),
+            "referenceNumber" => null, // null required
+            "target" => 'MERCHANT', 
+            "transactionType" => 'AUTH', 
+
+        ];
+        return $this->sendRequestPayment2('threeDSecure', $data);
+    }
+   
     private function sendRequest($endpoint, $data = [])
     {
-        $url = $this->baseUrl . $endpoint;
-       
-        return array('url' => $url, 'data' => $this->requestData); // return response data
+        $this->getEndpoint();
+        return $this->executeRequest($this->baseUrl . $endpoint, $data);
     }
-
+    
     private function sendRequestPayment($endpoint, $data = [])
     {
+        $this->getEndpoint();
+        return $this->executeRequest($this->paymentBaseUrl . $endpoint, $data);
+    }
+    
+    private function sendRequestPayment2($endpoint, $data = [])
+    {
+        $this->getEndpoint();
+        return $this->executeRequest2($this->paymentBaseUrl . $endpoint, $data);
+    }
+    
+    private function executeRequest($url, $data)
+    {
+        $data = array_merge($data, $this->requestData);
 
-        $url = $this->paymentBaseUrl . $endpoint;
-  
-        return array('url' => $url, 'data' => $this->requestData); // return response data
+        $curl = curl_init();
+
+        curl_setopt_array($curl, [
+            CURLOPT_URL => $url,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => "",
+            CURLOPT_TIMEOUT => 30,
+            CURLOPT_SSL_VERIFYPEER => 1,
+            CURLOPT_POSTFIELDS => json_encode($data),
+            CURLOPT_HTTPHEADER => [
+                "Content-Type: application/json",
+            ],
+        ]);
+
+        $httpResponse = curl_exec($curl);
+
+        curl_close($curl);
+    
+        return json_decode($httpResponse);
+    }
+
+    private function executeRequest2($url, $data)
+    {
+        // $data = array_merge($data, $this->requestData);
+
+        $curl = curl_init();
+
+        curl_setopt_array($curl, [
+            CURLOPT_URL => $url,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => "",
+            CURLOPT_TIMEOUT => 30,
+            CURLOPT_SSL_VERIFYPEER => 1,
+            CURLOPT_POSTFIELDS => json_encode($data),
+            CURLOPT_HTTPHEADER => [
+                "Content-Type: application/json",
+            ],
+        ]);
+
+        $httpResponse = curl_exec($curl);
+
+        curl_close($curl);
+    
+        return $httpResponse;
     }
 }

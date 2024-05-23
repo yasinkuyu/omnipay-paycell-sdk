@@ -43,7 +43,13 @@ And run composer to update your dependencies:
 
 The following gateways are provided by this package:
 
-- Paycell v3
+cd /YOUR-PATH/vendor/yasinkuyu/omnipay-paycell/example
+
+- php -S localhost:8000
+
+  PHP 8.3.6 Development Server (http://localhost:8000) started
+
+  http://localhost:8000/payment.php
 
 Gateway Methods
 
@@ -139,11 +145,11 @@ Composer dependencies require a PHP version ">= 8.1.0"
 
 ## Sample App
 
-    purchase.php
-    refund.php
-    void.php
-
-    checkout.php (Paycell host)
+    Purchase (Auth: Satış)
+    Authorize (PreAuth: Ön Otorizasyon)
+    Capture (PostAuth: Otorizasyon Kapatma)
+    Void (Void: İptal)
+    Refund (Credit: İade)
 
 ## Support
 
