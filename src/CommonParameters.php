@@ -17,19 +17,54 @@ trait CommonParameters
             'applicationName' => 'PAYCELLTEST',
             'applicationPwd' => 'PaycellTestPassword',
             'secureCode' => 'PAYCELL12345',
-            'eulaID' => '17',
-            'merchantCode' => '9998',
-            'referenceNumberPrefix' => '001',
+            'eulaID' => 17,
+            'merchantCode' => 9998,
+
+            'installment' => " ",
 
             'transactionDateTime' => $transactionDateTime, // YYYYMMddHHmmssSSS
             'transactionId' => $transactionDateTime,
             
-            'msisdn' => '',
+            'msisdn' => null,
 
             'paymentSecurity' => false,
-            'referenceNumber' => $transactionDateTime
+            'referenceNumber' => " ",
+            'originalReferenceNumber' => null,
+
+            'cardId' => null,
+            'cardToken' => null,
+            'pin' => null,
+            'pointAmount' => null,
+            'threeDSessionId' => " ",
+            'acquirerBankCode' => null,
+
+            // Three D Secure
+            '3D' => false
 
         ];
+    }
+
+    /**
+     * Get the 3D value.
+     *
+     * @return mixed The 3D value.
+     */
+    public function get3D()
+    {
+        return $this->getParameter('3D');
+    }
+
+    /**
+     * Set the 3D value.
+     *
+     * This method sets the 3D value for the user, which indicates whether the transaction is 3D secure or not.
+     *
+     * @param mixed $value The 3D value to set.
+     * @return $this
+     */
+    public function set3D($value)
+    {
+        return $this->setParameter('3D', $value);
     }
 
     /**
@@ -45,6 +80,8 @@ trait CommonParameters
     /**
      * Set the prefix.
      *
+     *  Müşterinin uygulamaya login olduğu telefon numarası. Ülke kodu + Telefon No formatında iletilir.
+     * 
      * @param mixed $value The prefix value
      * @return $this
      */
@@ -54,25 +91,24 @@ trait CommonParameters
     }
 
     /**
-     * Get the prefix.
+     * Get the installment.
      *
      * @return mixed
      */
-    public function getReferenceNumberPrefix()
-    {
-        return $this->getParameter('referenceNumberPrefix');
+    public function getInstallment() {
+        return $this->getParameter('installment');
     }
 
     /**
-     * Set the prefix.
+     * Set the installment.
      *
-     * @param mixed $value The prefix value
+     * @param mixed $value The installment value
      * @return $this
      */
-    public function setReferenceNumberPrefix($value)
-    {
-        return $this->setParameter('referenceNumberPrefix', $value);
+    public function setInstallment($value) {
+        return $this->setParameter('installment', $value);
     }
+
 
     /**
      * Get the application name.
@@ -194,13 +230,16 @@ trait CommonParameters
 
     /**
      * Set the referance number.
+     * 
+     * Üye işyeri uygulaması tarafından üretilecek unique numerik işlem referans numarası değeridir. 
+     * İlk 3 hanesi uygulama bazında unique’dir, bu değer entegrasyon aşamasında Paycell tarafından bildirilecektir.
      *
      * @param mixed $value The referance number value
      * @return $this
      */
     public function setReferenceNumber($value)
     {
-        return $this->setParameter('referenceNumber', $this->getParameter('referenceNumberPrefix') .  $value);
+        return $this->setParameter('referenceNumber',  $value);
     }
 
     /**
@@ -213,7 +252,30 @@ trait CommonParameters
      */
     public function getReferenceNumber()
     {
-        return $this->getParameter('referenceNumber');
+        return $this->getPrefix() . $this->getParameter('referenceNumber');
+    }
+
+    /**
+     * Set the original referance number.
+     * 
+     * İade edilecek işlemin “referenceNumber” değeridir.
+     * 
+     * @param mixed $value The origianl referance number value
+     * @return $this
+     */
+    public function setOriginalReferenceNumber($value)
+    {
+        return $this->setParameter('originalReferenceNumber', $value);
+    }
+
+    /**
+     * Get the origianl referance number.
+     * 
+     * @return mixed
+     */
+    public function getOriginalReferenceNumber()
+    {
+        return $this->getParameter('originalReferenceNumber');
     }
 
     /**
@@ -256,7 +318,7 @@ trait CommonParameters
      * @return string|null The transaction ID.
      */
     public function getTransactionId() {
-        return $this->getParameter('transactionId');
+        return $this->getPrefix() . $this->getParameter('transactionId');
     }
 
     /**
@@ -266,7 +328,7 @@ trait CommonParameters
      * @return $this
      */
     public function setTransactionId($value) {
-        return $this->setParameter('transactionId', $this->getParameter('prefix') . $value);
+        return $this->setParameter('transactionId', $value);
     }
 
     /**
@@ -276,5 +338,123 @@ trait CommonParameters
      */
     public function getClientIPAddress() {
         return $_SERVER['REMOTE_ADDR'] ?? "127.0.0.1";
+    }
+
+    /**
+     * Set the cardId.
+     * 
+     * Unique identifier for the card.
+     *
+     * @param mixed $value The cardId value
+     * @return $this
+     */
+    public function setCardId($value)
+    {
+        return $this->setParameter('cardId', $value);
+    }
+
+    /**
+     * Get the cardId.
+     *
+     * @return mixed
+     */
+    public function getCardId()
+    {
+        return $this->getParameter('cardId');
+    }
+
+    /**
+     * Set the pin.
+     * 
+     * Personal Identification Number associated with the card.
+     *
+     * @param mixed $value The pin value
+     * @return $this
+     */
+    public function setPin($value)
+    {
+        return $this->setParameter('pin', $value);
+    }
+
+    /**
+     * Get the pin.
+     *
+     * @return mixed
+     */
+    public function getPin()
+    {
+        return $this->getParameter('pin');
+    }
+
+
+
+    /**
+     * Set the pointAmount.
+     * 
+     * Amount of points to be used in the transaction.
+     *
+     * @param mixed $value The pointAmount value
+     * @return $this
+     */
+    public function setPointAmount($value)
+    {
+        return $this->setParameter('pointAmount', $value);
+    }
+
+    /**
+     * Get the pointAmount.
+     *
+     * @return mixed
+     */
+    public function getPointAmount()
+    {
+        return $this->getParameter('pointAmount');
+    }
+
+
+    /**
+     * Set the threeDSessionId.
+     * 
+     * Session ID for the 3D Secure transaction.
+     *
+     * @param mixed $value The threeDSessionId value
+     * @return $this
+     */
+    public function setThreeDSessionId($value)
+    {
+        return $this->setParameter('threeDSessionId', $value);
+    }
+
+    /**
+     * Get the threeDSessionId.
+     *
+     * @return mixed
+     */
+    public function getThreeDSessionId()
+    {
+        return $this->getParameter('threeDSessionId');
+    }
+
+    /**
+     * Set the acquirerBankCode.
+     * 
+     * Code representing the bank that is acquiring the transaction.
+     *
+     * @param mixed $value The acquirerBankCode value
+     * @return $this
+     */
+    public function setAcquirerBankCode($value)
+    {
+        return $this->setParameter('acquirerBankCode', $value);
+    }
+
+    /**
+     * Get the acquirerBankCode.
+     *
+     * @return mixed
+     */
+    public function getAcquirerBankCode()
+    {
+        return $this->getParameter('acquirerBankCode');
     }
 }

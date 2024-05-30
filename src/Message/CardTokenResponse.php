@@ -3,6 +3,7 @@
 namespace Omnipay\Paycell\Message;
 
 use Omnipay\Common\Message\AbstractResponse;
+use Omnipay\Paycell\Helpers\HashService;
 
 /**
  * Paycell
@@ -13,6 +14,7 @@ use Omnipay\Common\Message\AbstractResponse;
  */
 class CardTokenResponse extends AbstractResponse
 {
+
     /**
      * Check if the transaction was successful.
      *
@@ -20,7 +22,11 @@ class CardTokenResponse extends AbstractResponse
      */
     public function isSuccessful()
     {
-        return isset($this->data->header->transactionId);
+        $hashService = new HashService();
+ 
+        $responseHashData = $hashService->responseHash($this->getTransactionId(), $this->getResponseDateTime(), $this->getResponseCode(), $this->getCardToken());
+
+        return $responseHashData === $this->getHashData();
     }
 
     /**
@@ -30,17 +36,7 @@ class CardTokenResponse extends AbstractResponse
      */
     public function getMessage()
     {
-        return isset($this->data->header->responseDescription) ? $this->data->header->responseDescription :  $this->data->header->responseDescription;
-    }
-
-    /**
-     * Get the response stasus code 0: Success, >0: Fail.
-     *
-     * @return string|null
-     */
-    public function getStatus()
-    {
-        return isset($this->data->header->responseCode) ? $this->data->header->responseCode : null;
+        return isset($this->data->header->responseDescription) ? $this->data->header->responseDescription : null;
     }
 
     /**
@@ -54,6 +50,16 @@ class CardTokenResponse extends AbstractResponse
     }
 
     /**
+     * Get the hash Data.
+     *
+     * @return string|null
+     */
+    public function getHashData()
+    {
+        return isset($this->data->hashData) ? $this->data->hashData : null;
+    }
+
+    /**
      * Get the transaction ID.
      *
      * @return string|null
@@ -64,12 +70,22 @@ class CardTokenResponse extends AbstractResponse
     }
     
     /**
-     * Get the transaction date and time.
+     * Get the response code.
+     *
+     * @return string|null
+     */
+    public function getResponseCode()
+    {
+        return isset($this->data->header->responseCode) ? $this->data->header->responseCode : null;
+    }
+    
+    /**
+     * Get the response date and time.
      *
      * @return string|null The transaction date and time.
      */
-    public function getTransactionDateTime() {
-        return isset($this->data->header->transactionDateTime) ? $this->data->header->transactionDateTime : null;
+    public function getResponseDateTime() {
+        return isset($this->data->header->responseDateTime) ? $this->data->header->responseDateTime : null;
     }
 
 }

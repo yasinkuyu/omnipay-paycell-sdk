@@ -1,18 +1,13 @@
 <?php
 
-// print_r($_POST);
-// getThreeDSessionResult
-// cardToken -> provision 
-// purchase adımlarını tekrar başlat
-
 require 'init.php';
 
 // Error: There was an invalid parameter 
 // Min length 20
-$gateway->setReferenceNumber(date("Ymdhissss")); // unique transaction reference number, order number etc... 
- 
-$response = $gateway->purchase([
-    'amount' => '10.00',
+
+# https://paycell.com.tr/test-kredi-kartlari
+$response = $gateway->purchase3d([
+    'amount' => '1.00',
     'currency' => 'TRY',
     'card' => [
         'number' => '5406675406675403',
@@ -20,11 +15,16 @@ $response = $gateway->purchase([
         'expiryYear' => '26',
         'cvv' => '000' 
     ],
+    // "installment" => 0,
+    "returnUrl" => "http://local.paycell/callback.php"
 ])->send();
+
+
 
 if ($response->isSuccessful()) {
 
-    echo "Payment Successful" . PHP_EOL;
+    
+    echo "Purchase 3D Successful" . PHP_EOL;
 
     echo PHP_EOL;
 
@@ -41,6 +41,16 @@ if ($response->isSuccessful()) {
     echo "getApprovalCode: " . $response->getApprovalCode() . PHP_EOL;
     echo "getReconciliationDate: " . $response->getReconciliationDate() . PHP_EOL;
 
+    echo PHP_EOL;
+
+    sleep(5);
+
+    if($response->isRedirect()) {
+        echo "Please wait..." . PHP_EOL;
+        echo $response->getRedirectData();
+        exit;
+    }
+
 } else {
-    echo "Payment fail: " . $response->getMessage() . PHP_EOL;
+    echo "Purchase 3D fail: " . $response->getMessage() . PHP_EOL;
 }

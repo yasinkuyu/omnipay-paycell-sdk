@@ -11,8 +11,9 @@ use Omnipay\Common\Message\AbstractResponse;
  * 2024, insya.com
  * http://www.github.com/yasinkuyu/omnipay-paycell
  */
-class PurchaseResponse extends AbstractResponse
+class TransactionResponse extends AbstractResponse
 {
+ 
     /**
      * Check if the transaction was successful.
      *
@@ -22,30 +23,7 @@ class PurchaseResponse extends AbstractResponse
     {
         return isset($this->data->responseHeader->responseDescription) ? ($this->data->responseHeader->responseDescription === "Success") : false;
     }
-
-
-    /**
-     * Get the isRedirect.
-     *
-     * @return string|null
-     */
-    public function isRedirect()
-    {
-        return isset($this->data->responseHeader->isRedirect) ? $this->data->responseHeader->isRedirect : false;
-    }
-
-
-    /**
-     * Get the redirect url.
-     *
-     * @return string|null
-     */
-    public function getRedirectUrl()
-    {
-        return isset($this->data->responseHeader->redirectUrl) ? $this->data->responseHeader->redirectUrl : null;
-
-    }
-
+  
     /**
      * Get the response description.
      *
@@ -56,43 +34,9 @@ class PurchaseResponse extends AbstractResponse
         return isset($this->data->responseHeader->responseDescription) ? $this->data->responseHeader->responseDescription : null;
     }
 
-    /**
-     * Get the response stasus code 0: Success, >0: Fail.
-     *
-     * @return string|null
-     */
-    public function getStatus()
+    public function getData()
     {
-        return isset($this->data->responseHeader->responseCode) ? $this->data->responseHeader->responseCode : null;
-    }
-
-    /**
-     * Get the body.
-     *
-     * @return string|null
-     */
-    public function getRedirectContent()
-    {
-        return isset($this->data) ? $this->data : null;
-    }
-
-    /**
-     * Get return response hash data
-     *
-     * @return string
-     */
-    public function getHashData() {
-        return isset($this->data->hashData) ? $this->data->hashData : null;
-    }
-
-    /**
-     * Get the card token.
-     *
-     * @return string|null
-     */
-    public function getCardToken()
-    {
-        return isset($this->data->cardToken) ? $this->data->cardToken : null;
+        return parent::getData();
     }
 
     /**
@@ -103,6 +47,12 @@ class PurchaseResponse extends AbstractResponse
     public function getTransactionId()
     {
         return isset($this->data->responseHeader->transactionId) ? $this->data->responseHeader->transactionId : null;
+    }
+
+    // Omnipay transaction
+    public function getTransactionReference()
+    {
+        return $this->getTransactionId();
     }
     
     /**
@@ -194,5 +144,44 @@ class PurchaseResponse extends AbstractResponse
     public function getIyzPaymentTransactionId()
     {
         return isset($this->data->iyzPaymentTransactionId) ? $this->data->iyzPaymentTransactionId : null;
+    }
+
+    /**
+     * Get the Retry Status Code.
+     *
+     * @return int|null The retry status code if set, otherwise null.
+     */
+    public function getRetryStatusCode()
+    {
+        return isset($this->data->retryStatusCode) ? $this->data->retryStatusCode : null;
+    }
+
+
+    /**
+     * Get the Retry Status Description.
+     *
+     * @return string|null The retry status description if set, otherwise null.
+     */
+    public function getRetryStatusDescription()
+    {
+        return isset($this->data->retryStatusDescription) ? $this->data->retryStatusDescription : null;
+    }
+
+    /**
+     * Get extra parameters
+     *
+     * @return string|null
+     */
+    public function getExtraParameters() {
+        return isset($this->data->extraParameters) ? $this->data->extraParameters : null;
+    }
+
+    /**
+     * Get extra parameters
+     *
+     * @return string|null
+     */
+    public function getProvisionList() {
+        return isset($this->data->provisionList) ? $this->data->provisionList : [];
     }
 }

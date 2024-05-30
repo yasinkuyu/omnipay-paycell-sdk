@@ -4,6 +4,9 @@ namespace Omnipay\Paycell;
 
 use Omnipay\Common\AbstractGateway;
 use Omnipay\Paycell\Message\PurchaseRequest;
+use Omnipay\Paycell\Message\RefundRequest;
+use Omnipay\Paycell\Message\InquireRequest;
+use Omnipay\Paycell\Message\ReverseRequest;
 use Omnipay\Paycell\Message\Purchase3dRequest;
 
 /**
@@ -17,7 +20,6 @@ class Gateway extends AbstractGateway
 {
     
     use CommonParameters;
-
 
     public function getName()
     {
@@ -36,6 +38,28 @@ class Gateway extends AbstractGateway
     }
 
     /**
+     * Initiate a refund request.
+     *
+     * @param array $parameters Additional parameters for the refund
+     * @return \Omnipay\Common\Message\AbstractRequest
+     */
+    public function refund(array $parameters = [])
+    {
+        return $this->createRequest(RefundRequest::class, $parameters);
+    }
+
+    /**
+     * Initiate a inquire request.
+     *
+     * @param array $parameters Additional parameters for the inquire
+     * @return \Omnipay\Common\Message\AbstractRequest
+     */
+    public function inquire(array $parameters = [])
+    {
+        return $this->createRequest(InquireRequest::class, $parameters);
+    }
+
+    /**
      * Initiate a purchase 3d request.
      *
      * @return \Omnipay\Common\Message\AbstractRequest
@@ -43,5 +67,15 @@ class Gateway extends AbstractGateway
     public function purchase3d(array $parameters = [])
     {
         return $this->createRequest(Purchase3dRequest::class, $parameters);
+    }
+
+    /**
+     * Initiate a reverse request.
+     *
+     * @return \Omnipay\Common\Message\AbstractRequest
+     */
+    public function reverse(array $parameters = [])
+    {
+        return $this->createRequest(ReverseRequest::class, $parameters);
     }
 }

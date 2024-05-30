@@ -2,7 +2,6 @@
 
 namespace Omnipay\Paycell\Message;
 
-
 /**
  * Paycell
  * 
@@ -10,9 +9,11 @@ namespace Omnipay\Paycell\Message;
  * 2024, insya.com
  * http://www.github.com/yasinkuyu/omnipay-paycell
  */
-abstract class AbstractRequest extends AbstractPayment {
-     
-    protected $actionType = 'SALE';
- 
+abstract class AbstractRequest extends PaycellService {
     
+    // Ödeme işlem tipini belirtir, ön otorizasyon uygulaması söz konusu değilse 
+    // SALE değeri gönderilir[SALE, PREAUTH, POSTAUTH].
+
+    protected $actionType = 'SALE';
+  
 }

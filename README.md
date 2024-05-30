@@ -56,8 +56,7 @@ Gateway Methods
 - purchase($options) - authorize and immediately capture an amount on the customer's card
 - refund($options) - refund an already processed transaction
 
-- checkout($options) - paycell host payment method
-- checkout_status($options) - paycell host payment method status
+  etc..
 
 For general usage instructions, please see the main [Omnipay](https://github.com/thephpleague/omnipay)
 repository.
@@ -143,13 +142,13 @@ repository.
 
 Composer dependencies require a PHP version ">= 8.1.0"
 
-## Sample App
+## Example
 
-    Purchase (Auth: Satış)
-    Authorize (PreAuth: Ön Otorizasyon)
-    Capture (PostAuth: Otorizasyon Kapatma)
-    Void (Void: İptal)
-    Refund (Credit: İade)
+    Purchase (Satış)
+    Purchase 3D
+    Inquiry (Fetch: Bilgi)
+    Refund (İade)
+    Reverse (İptal)
 
 ## Support
 
