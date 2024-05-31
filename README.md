@@ -1,4 +1,4 @@
-# Omnipay: Paycell (not completed yet)
+# Omnipay: Paycell
 
 ### Turkcell Paycell gateway for Omnipay payment processing library
 
