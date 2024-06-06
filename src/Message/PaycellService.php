@@ -488,7 +488,7 @@ abstract class PaycellService extends AbstractRequest
     public function threeDSecure(array $data)
     {
         $this->requestData = [
-            "callbackUrl" => 'https://insya.com/paycell/callback.php',
+            "callbackUrl" => $this->getReturnUrl(),
         ];
 
         $this->getEndpoint();
