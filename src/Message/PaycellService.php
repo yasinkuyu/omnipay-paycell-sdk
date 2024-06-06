@@ -26,6 +26,8 @@ abstract class PaycellService extends AbstractRequest
 
     /**
      * Sets the endpoint URLs based on the test mode.
+     * 
+     * This method sets the `$baseUrl` and `$paymentBaseUrl` properties based on the value of the `$testMode` property. If `$testMode` is false, the production URLs are used. Otherwise, the test URLs are used.
      */
     public function getEndpoint(): void
     {
@@ -39,9 +41,16 @@ abstract class PaycellService extends AbstractRequest
     }
 
     /**
-     * Returns the request header.
+     * Returns the request header for the Paycell service.
      *
-     * @return array
+     * The request header includes the following information:
+     * - Application name
+     * - Application password
+     * - Client IP address
+     * - Transaction date and time
+     * - Transaction ID
+     *
+     * @return array An associative array containing the request header information.
      */
     private function getRequestHeader(): array
     {
@@ -83,9 +92,12 @@ abstract class PaycellService extends AbstractRequest
     /**
      * Executes a CURL request to the given URL with the provided data.
      *
-     * @param string $url
-     * @param array $data
-     * @return mixed
+     * This method is responsible for executing a CURL request to the specified URL with the provided data. It sets up the CURL options, sends the request, and returns the decoded JSON response.
+     *
+     * @param string $url The URL to send the CURL request to.
+     * @param array $data An associative array of data to be sent in the request body.
+     * @return mixed The decoded JSON response from the CURL request.
+     * @throws \Exception If the CURL request fails or the response is empty.
      */
     private function executeRequest(string $url, array $data)
     {
@@ -164,8 +176,10 @@ abstract class PaycellService extends AbstractRequest
     /**
      * Provision a payment.
      * 
-     * @param array $data
-     * @return mixed
+     * This method is used to provision a payment transaction. It sends a request to the Paycell service to provision the payment, using the provided data.
+     *
+     * @param array $data An associative array containing the necessary data for the provision payment request, such as the card ID, merchant code, MSISDN, reference number, amount, payment type, acquirer bank code, and 3D session ID.
+     * @return mixed The response from the Paycell service for the provision payment request.
      */
     public function provision(array $data)
     {
@@ -208,8 +222,10 @@ abstract class PaycellService extends AbstractRequest
     /**
      * Reverse a payment.
      *
-     * @param array $data
-     * @return mixed
+     * This method is used to reverse a previous payment transaction. It sends a request to the Paycell service to reverse the payment, using the provided data.
+     *
+     * @param array $data An associative array containing the necessary data for the reverse payment request, such as the amount, merchant code, MSISDN, reference number, original reference number, payment type, acquirer bank code, and 3D session ID.
+     * @return mixed The response from the Paycell service for the reverse payment request.
      */
     public function reverse(array $data)
     {
@@ -231,8 +247,10 @@ abstract class PaycellService extends AbstractRequest
     /**
      * Refund a payment.
      *
-     * @param array $data
-     * @return mixed
+     * This method is used to refund a previous payment transaction. It sends a request to the Paycell service to refund the payment, using the provided data.
+     *
+     * @param array $data An associative array containing the necessary data for the refund payment request, such as the amount, merchant code, MSISDN, reference number, and original reference number.
+     * @return mixed The response from the Paycell service for the refund payment request.
      */
     public function refund(array $data)
     {
@@ -261,8 +279,10 @@ abstract class PaycellService extends AbstractRequest
     /**
      * Get 3D secure session.
      *
-     * @param array $data
-     * @return mixed
+     * This method is used to get a 3D secure session for a payment transaction. It sends a request to the Paycell service to initiate the 3D secure session, using the provided data.
+     *
+     * @param array $data An associative array containing the necessary data for the 3D secure session request, such as the amount, merchant code, MSISDN, and transaction type.
+     * @return mixed The response from the Paycell service for the 3D secure session request.
      */
     public function getThreeDSession(array $data)
     {
@@ -285,8 +305,10 @@ abstract class PaycellService extends AbstractRequest
     /**
      * Get 3D secure session result.
      *
-     * @param array $data
-     * @return mixed
+     * This method is used to get the result of a 3D secure session for a payment transaction. It sends a request to the Paycell service to retrieve the 3D secure session result, using the provided data.
+     *
+     * @param array $data An associative array containing the necessary data for the 3D secure session result request, such as the amount, currency, merchant code, MSISDN, reference number, and transaction type.
+     * @return mixed The response from the Paycell service for the 3D secure session result request.
      */
     public function getThreeDSessionResult(array $data)
     {
@@ -428,10 +450,12 @@ abstract class PaycellService extends AbstractRequest
     }
 
     /**
-     * Get card token securely.
+     * Get a secure card token.
      *
-     * @param string $requestHashData
-     * @return mixed
+     * This method validates the credit card information, retrieves the card details, and sends a request to the payment gateway to get a secure card token.
+     *
+     * @param string $requestHashData The hash data required for the secure card token request.
+     * @return mixed The response from the secure card token request.
      */
     public function getCardTokenSecure(string $requestHashData)
     {
@@ -456,15 +480,15 @@ abstract class PaycellService extends AbstractRequest
     }
 
     /**
-     * 3D Secure redirect page.
+     * Performs a 3D Secure redirect for a payment transaction.
      *
-     * @param array $data
-     * @return mixed
+     * @param array $data An array of data required for the 3D Secure redirect, such as payment details.
+     * @return mixed The response from the 3D Secure redirect request.
      */
     public function threeDSecure(array $data)
     {
         $this->requestData = [
-            "callbackUrl" => $this->getReturnUrl(),
+            "callbackUrl" => 'https://insya.com/paycell/callback.php',
         ];
 
         $this->getEndpoint();

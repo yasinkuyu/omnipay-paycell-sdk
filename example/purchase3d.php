@@ -19,10 +19,7 @@ $response = $gateway->purchase3d([
     "returnUrl" => "http://local.paycell/callback.php"
 ])->send();
 
-
-
 if ($response->isSuccessful()) {
-
     
     echo "Purchase 3D Successful" . PHP_EOL;
 
