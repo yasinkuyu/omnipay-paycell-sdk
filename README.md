@@ -23,43 +23,53 @@ processing library for PHP 5.3+. This package implements Turkcell Paycell suppor
       composer require php-http/curl-client guzzlehttp/psr7 php-http/message
     ```
 
-Omnipay is installed via [Composer](http://getcomposer.org/). To install, simply add it
-to your `composer.json` file:
+    Omnipay is installed via [Composer](http://getcomposer.org/). To install, simply add it
+    to your `composer.json` file:
 
-```json
-{
-  "require": {
-    "yasinkuyu/omnipay-paycell": "^3.0"
-  }
-}
-```
+    ```json
+    {
+      "require": {
+        "yasinkuyu/omnipay-paycell": "^3.0"
+      }
+    }
+    ```
 
-And run composer to update your dependencies:
+    And run composer to update your dependencies:
 
     $ curl -s http://getcomposer.org/installer | php
     $ php composer.phar update
 
 ## Basic Usage
 
-The following gateways are provided by this package:
+    The following gateways are provided by this package:
 
-cd /YOUR-PATH/vendor/yasinkuyu/omnipay-paycell/example
+    cd /YOUR-PATH/vendor/yasinkuyu/omnipay-paycell/example
 
-- php -S localhost:8000
+    Change init.php.example to init.php
 
-  PHP 8.3.6 Development Server (http://localhost:8000) started
+    - php -S localhost:8000
 
-  http://localhost:8000/payment.php
+      PHP 8.3.6 Development Server (http://localhost:8000) started
 
-Gateway Methods
+      http://localhost:8000/payment.php
 
-- purchase($options) - authorize and immediately capture an amount on the customer's card
-- refund($options) - refund an already processed transaction
+## Gateway Methods
 
-  etc..
+    Purchase (Satış)
+    Purchase 3D
+    Inquiry (Fetch: Bilgi)
+    Refund (İade)
+    Reverse (İptal)
 
-For general usage instructions, please see the main [Omnipay](https://github.com/thephpleague/omnipay)
-repository.
+    - purchase($options) - authorize and immediately capture an amount on the customer's card
+    - refund($options) - refund an already processed transaction
+
+    etc..
+
+    For general usage instructions, please see the main [Omnipay](https://github.com/thephpleague/omnipay)
+    repository.
+
+## Description
 
 ```
   - Entegrasyona başlamadan önce menüde bulunan API Entegrasyonu sekmesindeki Genel Özellikler ve kullanmak istediğiniz fonksiyonlar için Fonksiyon Listesi bölümlerini incelemeniz faydalı olacaktır.
@@ -141,14 +151,6 @@ repository.
     require_once('vendor/autoload.php');
 
 Composer dependencies require a PHP version ">= 8.1.0"
-
-## Example
-
-    Purchase (Satış)
-    Purchase 3D
-    Inquiry (Fetch: Bilgi)
-    Refund (İade)
-    Reverse (İptal)
 
 ## Support
 

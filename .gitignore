@@ -1,0 +1,23 @@
+# Composer files
+composer.phar
+/vendor/
+
+# Local environment files
+.env
+.env.*
+
+# PHP files
+*.log
+/example/init.php
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor files
+.vscode/
+.idea/
+
+# Other
+.phpunit.result.cache
+
