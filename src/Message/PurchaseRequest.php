@@ -55,48 +55,44 @@ use Omnipay\Paycell\Helpers\HashService;
  */
 class PurchaseRequest extends AbstractRequest
 {
-
     use CommonParameters;
 
     protected $actionType = 'SALE';
 
     public function getData()
     {
-         
         $hashService = new HashService();
+        $hashService->applicationName = $this->getApplicationName();
+        $hashService->applicationPwd = $this->getApplicationPwd();
+        $hashService->secureCode = $this->getSecureCode();
 
-        $transactionDateTime =  $this->getTransactionDateTime();
+        $transactionDateTime = $this->getTransactionDateTime();
         $transactionId = $this->getTransactionId();
 
         $requestHashData = $hashService->requestHash($transactionId, $transactionDateTime);
-        
-        $cardTokenResponse = new CardTokenResponse($this, $this->getCardTokenSecure($requestHashData));
- 
-        if(!$cardTokenResponse->isSuccessful()) {
-            die("Invalid card token. " . $cardTokenResponse->getMessage());
+
+        $cardTokenResponse = $this->getCardTokenSecure($requestHashData, $transactionId, $transactionDateTime);
+        $cardTokenResponse->hashService = $hashService;
+
+        $cardTokenResponse = new CardTokenResponse($this, $cardTokenResponse);
+
+        if (!$cardTokenResponse->isSuccessful()) {
+            throw new \Exception("Invalid card token. " . $cardTokenResponse->getMessage());
         }
- 
+
         return [
-           "hashData" => $requestHashData,
-           "cardToken" => $cardTokenResponse->getCardToken()
+            "hashData" => $requestHashData,
+            "cardToken" => $cardTokenResponse->getCardToken()
         ];
     }
 
     public function sendData($data)
     {
-
         $httpResponse = $this->provision($data);
 
-        // Create and return a response
         return $this->createResponse($httpResponse);
-    } 
+    }
 
-    /**
-     * Create a response object.
-     *
-     * @param array $data The response data
-     * @return TransactionResponse
-     */
     protected function createResponse($data)
     {
         return $this->response = new TransactionResponse($this, $data);

@@ -13,7 +13,6 @@ abstract class AbstractRequest extends PaycellService {
     
     // Ödeme işlem tipini belirtir, ön otorizasyon uygulaması söz konusu değilse 
     // SALE değeri gönderilir[SALE, PREAUTH, POSTAUTH].
-
     protected $actionType = 'SALE';
   
 }

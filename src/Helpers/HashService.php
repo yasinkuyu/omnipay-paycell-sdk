@@ -1,8 +1,6 @@
 <?php
 namespace Omnipay\Paycell\Helpers;
 
-use Omnipay\Paycell\Gateway;
-
 /**
  * Paycell
  * 
@@ -11,7 +9,11 @@ use Omnipay\Paycell\Gateway;
  * http://www.github.com/yasinkuyu/omnipay-paycell
  */
 class HashService {
- 
+
+    public $applicationName;
+    public $applicationPwd;
+    public $secureCode;
+    
     /**
      * Generates hash data for the request.
      * 
@@ -75,10 +77,9 @@ class HashService {
     private function generateHash($transactionId, $dateTime, $responseCode = null, $cardToken = null): string {
         
         // Get necessary parameters from the gateway
-        $gateway = new Gateway();
-        $applicationName = $gateway->getApplicationName();
-        $applicationPwd =  $gateway->getApplicationPwd();
-        $secureCode = $gateway->getSecureCode();
+        $applicationName = $this->applicationName;
+        $applicationPwd =  $this->applicationPwd;
+        $secureCode = $this->secureCode;
 
         // Generate security data and hash it
         $securityData = $this->hash($applicationPwd.$applicationName);

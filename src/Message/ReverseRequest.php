@@ -67,16 +67,9 @@ class ReverseRequest extends AbstractRequest
     {
         $httpResponse = $this->reverse($data);
 
-        // Create and return a response
         return $this->createResponse($httpResponse);
-    } 
+    }
 
-    /**
-     * Create a response object.
-     *
-     * @param array $data The response data
-     * @return TransactionResponse
-     */
     protected function createResponse($data)
     {
         return $this->response = new TransactionResponse($this, $data);

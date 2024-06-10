@@ -8,7 +8,7 @@
 [![License](https://poser.pugx.org/yasinkuyu/omnipay-paycell/license)](https://packagist.org/packages/yasinkuyu/omnipay-paycell)
 
 [Omnipay](https://github.com/thephpleague/omnipay) is a framework agnostic, multi-gateway payment
-processing library for PHP 5.3+. This package implements Turkcell Paycell support for Omnipay.
+processing library for PHP 8.1.x. This package implements Turkcell Paycell support for Omnipay.
 
 # Readme TR
 

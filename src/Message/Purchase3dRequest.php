@@ -4,6 +4,7 @@ namespace Omnipay\Paycell\Message;
  
 use Omnipay\Paycell\CommonParameters;
 use Omnipay\Paycell\Helpers\HashService;
+use Omnipay\Paycell\Gateway;
 
 /**
  * Paycell
@@ -12,7 +13,7 @@ use Omnipay\Paycell\Helpers\HashService;
  * 2024, insya.com
  * http://www.github.com/yasinkuyu/omnipay-paycell
  */
-class Purchase3dRequest extends AbstractRequest
+class Purchase3DRequest extends AbstractRequest
 {
 
     use CommonParameters;
@@ -22,46 +23,41 @@ class Purchase3dRequest extends AbstractRequest
     public function getData()
     {
         $hashService = new HashService();
+        $hashService->applicationName = $this->getApplicationName();
+        $hashService->applicationPwd = $this->getApplicationPwd();
+        $hashService->secureCode = $this->getSecureCode();
 
-        $transactionDateTime =  $this->getTransactionDateTime();
         $transactionId = $this->getTransactionId();
+        $transactionDateTime = $this->getTransactionDateTime();
 
         $requestHashData = $hashService->requestHash($transactionId, $transactionDateTime);
         
-        $cardTokenResponse = new CardTokenResponse($this, $this->getCardTokenSecure($requestHashData));
+        $cardTokenResponse = $this->getCardTokenSecure($requestHashData, $transactionId, $transactionDateTime);
+        $cardTokenResponse->hashService = $hashService;
+
+        $cardTokenResponse = new CardTokenResponse($this, $cardTokenResponse);
  
-        if(!$cardTokenResponse->isSuccessful()) {
-            die("Invalid card token. " . $cardTokenResponse->getMessage());
+        if (!$cardTokenResponse->isSuccessful()) {
+            throw new \Exception("Invalid card token. " . $cardTokenResponse->getMessage());
         }
- 
+  
         return [
-           "hashData" => $requestHashData,
+           "hashData" => $cardTokenResponse->getHashData(),
            "cardToken" => $cardTokenResponse->getCardToken()
         ];
     }
 
     public function sendData($data)
     {
-
-        // Initiate a 3D Secure session and get the HTTP response.
         $httpResponse = $this->getThreeDSession($data);
          
-        // Extract the 3D Secure session ID from the response.
-        // Prepare an array with the 3D Secure session ID and callback URL.
         $httpResponse->redirectContentResponse = $this->threeDSecure([
             "threeDSessionId" => $httpResponse->threeDSessionId,
         ]);
 
-        // Create and return a response
         return $this->createResponse($httpResponse);
     } 
 
-    /**
-     * Create a response object.
-     *
-     * @param array $data The response data
-     * @return Purchase3DResponse
-     */
     protected function createResponse($data)
     {
         return $this->response = new Purchase3DResponse($this, $data);

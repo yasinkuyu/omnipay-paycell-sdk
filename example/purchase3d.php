@@ -16,7 +16,7 @@ $response = $gateway->purchase3d([
         'cvv' => '000' 
     ],
     // "installment" => 0,
-    "returnUrl" => "http://local.paycell/callback.php"
+    "returnUrl" => "https://localhost/paycell/callback.php"
 ])->send();
 
 if ($response->isSuccessful()) {
@@ -39,8 +39,6 @@ if ($response->isSuccessful()) {
     echo "getReconciliationDate: " . $response->getReconciliationDate() . PHP_EOL;
 
     echo PHP_EOL;
-
-    sleep(5);
 
     if($response->isRedirect()) {
         echo "Please wait..." . PHP_EOL;

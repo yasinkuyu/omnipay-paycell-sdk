@@ -21,7 +21,7 @@ class TransactionResponse extends AbstractResponse
      */
     public function isSuccessful()
     {
-        return isset($this->data->responseHeader->responseDescription) ? ($this->data->responseHeader->responseDescription === "Success") : false;
+        return $this->data->responseHeader->responseDescription ?? false === "Success";
     }
   
     /**
@@ -31,7 +31,7 @@ class TransactionResponse extends AbstractResponse
      */
     public function getMessage()
     {
-        return isset($this->data->responseHeader->responseDescription) ? $this->data->responseHeader->responseDescription : null;
+        return $this->data->responseHeader->responseDescription ?? null;
     }
 
     public function getData()
@@ -46,7 +46,7 @@ class TransactionResponse extends AbstractResponse
      */
     public function getTransactionId()
     {
-        return isset($this->data->responseHeader->transactionId) ? $this->data->responseHeader->transactionId : null;
+        return $this->data->responseHeader->transactionId ?? null;
     }
 
     // Omnipay transaction
@@ -61,7 +61,7 @@ class TransactionResponse extends AbstractResponse
      * @return string|null The transaction date and time.
      */
     public function getTransactionDateTime() {
-        return isset($this->data->responseHeader->transactionDateTime) ? $this->data->responseHeader->transactionDateTime : null;
+        return $this->data->responseHeader->transactionDateTime ?? null;
     }
 
     /**
@@ -71,7 +71,7 @@ class TransactionResponse extends AbstractResponse
      */
     public function getOrderId()
     {
-        return isset($this->data->orderId) ? $this->data->orderId : null;
+        return $this->data->orderId ?? null;
     }
 
     /**
@@ -81,7 +81,7 @@ class TransactionResponse extends AbstractResponse
      */
     public function getAcquirerBankCode()
     {
-        return isset($this->data->acquirerBankCode) ? $this->data->acquirerBankCode : null;
+        return $this->data->acquirerBankCode ?? null;
     }
 
     /**
@@ -91,7 +91,7 @@ class TransactionResponse extends AbstractResponse
      */
     public function getIssuerBankCode()
     {
-        return isset($this->data->issuerBankCode) ? $this->data->issuerBankCode : null;
+        return $this->data->issuerBankCode ?? null;
     }
 
     /**
@@ -101,7 +101,7 @@ class TransactionResponse extends AbstractResponse
      */
     public function getApprovalCode()
     {
-        return isset($this->data->approvalCode) ? $this->data->approvalCode : null;
+        return $this->data->approvalCode ?? null;
     }
 
     /**
@@ -111,7 +111,7 @@ class TransactionResponse extends AbstractResponse
      */
     public function getReconciliationDate()
     {
-        return isset($this->data->reconciliationDate) ? $this->data->reconciliationDate : null;
+        return $this->data->reconciliationDate ?? null;
     }
 
     /**
@@ -121,7 +121,7 @@ class TransactionResponse extends AbstractResponse
      */
     public function getIyzPaymentId()
     {
-        return isset($this->data->iyzPaymentId) ? $this->data->iyzPaymentId : null;
+        return $this->data->iyzPaymentId ?? null;
     }
     
     /**
@@ -133,7 +133,7 @@ class TransactionResponse extends AbstractResponse
      */
     public function getThreeDSessionId()
     {
-        return isset($this->data->threeDSessionId) ? $this->data->threeDSessionId : null;
+        return $this->data->threeDSessionId ?? null;
     }
 
     /**
@@ -143,7 +143,7 @@ class TransactionResponse extends AbstractResponse
      */
     public function getIyzPaymentTransactionId()
     {
-        return isset($this->data->iyzPaymentTransactionId) ? $this->data->iyzPaymentTransactionId : null;
+        return $this->data->iyzPaymentTransactionId ?? null;
     }
 
     /**
@@ -153,7 +153,7 @@ class TransactionResponse extends AbstractResponse
      */
     public function getRetryStatusCode()
     {
-        return isset($this->data->retryStatusCode) ? $this->data->retryStatusCode : null;
+        return $this->data->retryStatusCode ?? null;
     }
 
 
@@ -164,7 +164,7 @@ class TransactionResponse extends AbstractResponse
      */
     public function getRetryStatusDescription()
     {
-        return isset($this->data->retryStatusDescription) ? $this->data->retryStatusDescription : null;
+        return $this->data->retryStatusDescription ?? null;
     }
 
     /**
@@ -173,7 +173,7 @@ class TransactionResponse extends AbstractResponse
      * @return string|null
      */
     public function getExtraParameters() {
-        return isset($this->data->extraParameters) ? $this->data->extraParameters : null;
+        return $this->data->extraParameters ?? null;
     }
 
     /**
@@ -182,6 +182,6 @@ class TransactionResponse extends AbstractResponse
      * @return string|null
      */
     public function getProvisionList() {
-        return isset($this->data->provisionList) ? $this->data->provisionList : [];
+        return $this->data->provisionList ?? [];
     }
 }

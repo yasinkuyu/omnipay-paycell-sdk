@@ -457,7 +457,7 @@ abstract class PaycellService extends AbstractRequest
      * @param string $requestHashData The hash data required for the secure card token request.
      * @return mixed The response from the secure card token request.
      */
-    public function getCardTokenSecure(string $requestHashData)
+    public function getCardTokenSecure(string $requestHashData, $transactionId, $transactionDateTime)
     {
         $this->validate('card');
 
@@ -466,9 +466,10 @@ abstract class PaycellService extends AbstractRequest
         $this->requestData = [
             "header" => [
                 "applicationName" => $this->getApplicationName(),
-                "transactionId" => $this->getTransactionId(),
-                "transactionDateTime" => $this->getTransactionDateTime(),
+                "transactionId" => $transactionId,
+                "transactionDateTime" => $transactionDateTime,
             ],
+
             "hashData" => $requestHashData,
             "creditCardNo" => $card->getNumber(),
             "expireDateMonth" => $card->getExpiryDate('m'),
@@ -488,6 +489,7 @@ abstract class PaycellService extends AbstractRequest
     public function threeDSecure(array $data)
     {
         $this->requestData = [
+            "isPost3DResult" => null,
             "callbackUrl" => $this->getReturnUrl(),
         ];
 
@@ -495,7 +497,7 @@ abstract class PaycellService extends AbstractRequest
 
         $url = $this->paymentBaseUrl . "threeDSecure";
         $data = array_merge($data, $this->requestData);
-
+ print_r($data);
         $curl = curl_init();
 
         curl_setopt_array($curl, [

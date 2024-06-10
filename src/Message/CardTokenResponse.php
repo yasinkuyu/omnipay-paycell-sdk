@@ -22,9 +22,8 @@ class CardTokenResponse extends AbstractResponse
      */
     public function isSuccessful()
     {
-        $hashService = new HashService();
- 
-        $responseHashData = $hashService->responseHash($this->getTransactionId(), $this->getResponseDateTime(), $this->getResponseCode(), $this->getCardToken());
+  
+        $responseHashData = $this->data->hashService->responseHash($this->getTransactionId(), $this->getResponseDateTime(), $this->getResponseCode(), $this->getCardToken());
 
         return $responseHashData === $this->getHashData();
     }
@@ -36,7 +35,7 @@ class CardTokenResponse extends AbstractResponse
      */
     public function getMessage()
     {
-        return isset($this->data->header->responseDescription) ? $this->data->header->responseDescription : null;
+        return $this->data->header->responseDescription ?? null;
     }
 
     /**
@@ -46,7 +45,7 @@ class CardTokenResponse extends AbstractResponse
      */
     public function getCardToken()
     {
-        return isset($this->data->cardToken) ? $this->data->cardToken : null;
+        return $this->data->cardToken ?? null;
     }
 
     /**
@@ -56,7 +55,7 @@ class CardTokenResponse extends AbstractResponse
      */
     public function getHashData()
     {
-        return isset($this->data->hashData) ? $this->data->hashData : null;
+        return $this->data->hashData ?? null;
     }
 
     /**
@@ -66,7 +65,7 @@ class CardTokenResponse extends AbstractResponse
      */
     public function getTransactionId()
     {
-        return isset($this->data->header->transactionId) ? $this->data->header->transactionId : null;
+        return $this->data->header->transactionId ?? null;
     }
     
     /**
@@ -76,7 +75,7 @@ class CardTokenResponse extends AbstractResponse
      */
     public function getResponseCode()
     {
-        return isset($this->data->header->responseCode) ? $this->data->header->responseCode : null;
+        return $this->data->header->responseCode ?? null;
     }
     
     /**
@@ -85,7 +84,7 @@ class CardTokenResponse extends AbstractResponse
      * @return string|null The transaction date and time.
      */
     public function getResponseDateTime() {
-        return isset($this->data->header->responseDateTime) ? $this->data->header->responseDateTime : null;
+        return $this->data->header->responseDateTime ?? null;
     }
 
 }

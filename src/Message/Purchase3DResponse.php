@@ -13,20 +13,15 @@ use Omnipay\Common\Message\AbstractResponse;
  */
 class Purchase3DResponse extends TransactionResponse
 {
- 
-
     /**
      * Get the isRedirect.
      *
-     * @return string|null
+     * @return bool
      */
     public function isRedirect()
     {
         // Check if the 'payForm' element exists in the HTML response
-        $isRedirect = strpos($this->getRedirectData(), 'name="payForm"') !== false;
-
-        // Return true if 'payForm' element exists, false otherwise
-        return $isRedirect;
+        return strpos($this->getRedirectData(), 'name="payForm"') !== false;
     }
 
     /**
@@ -38,7 +33,6 @@ class Purchase3DResponse extends TransactionResponse
     {
         return isset($this->data->redirectContentResponse) ? trim($this->data->redirectContentResponse) : null;
     }
- 
     
     /**
      * Get the Three D Session Id.
@@ -49,7 +43,6 @@ class Purchase3DResponse extends TransactionResponse
      */
     public function getThreeDSessionId()
     {
-        return isset($this->data->threeDSessionId) ? $this->data->threeDSessionId : null;
+        return $this->data->threeDSessionId ?? null;
     }
- 
 }

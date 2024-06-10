@@ -13,12 +13,12 @@ trait CommonParameters
         return [
 
             // default parameters
-            'prefix' => 666,
-            'applicationName' => 'PAYCELLTEST',
-            'applicationPwd' => 'PaycellTestPassword',
-            'secureCode' => 'PAYCELL12345',
-            'eulaID' => 17,
-            'merchantCode' => 9998,
+            'prefix' => '',
+            'applicationName' => '',
+            'applicationPwd' => '',
+            'secureCode' => '',
+            'eulaID' => '',
+            'merchantCode' => '',
 
             'installment' => " ",
 
