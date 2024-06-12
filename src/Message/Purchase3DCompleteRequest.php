@@ -27,7 +27,6 @@ class Purchase3DCompleteRequest extends AbstractRequest
     {
         $httpResponse = $this->getThreeDSessionResult();
 
-      print_r($httpResponse);
         return $this->createResponse($httpResponse);
     } 
 
