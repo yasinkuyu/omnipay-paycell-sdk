@@ -172,9 +172,10 @@ class Purchase3DCompleteResponse extends TransactionResponse
             0 => "3D Secure imzası geçersiz, doğrulama yapılamıyor, SMS şifresi yanlış veya kullanıcı iptal butonuna basmış.",
         ];
 
-        $message = $mdStatuses[$this->data->mdStatus] ?? null;
+        $message = isset($mdStatuses[$this->data->mdStatus]) ? ' Message: '. $mdStatuses[$this->data->mdStatus] : null;
 
-        return ($this->data->threeDOperationResult->threeDResultDescription ?? null) .' Message: '. $message;
+        return ($this->data->threeDOperationResult->threeDResultDescription ?? null) . $message;
+
 
     }
 }
