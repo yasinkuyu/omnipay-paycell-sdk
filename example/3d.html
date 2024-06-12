@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Secure Popup</title>
+</head>
+<body>
+    <button id="open3DSecure">Open 3D Secure</button>
+
+    <script>
+        document.getElementById('open3DSecure').addEventListener('click', function() {
+            // Backend'den 3D Secure HTML içeriğini al
+            fetch('http://local.paycell/purchase3d.php')
+                .then(response => response.text())
+                .then(htmlContent => {
+                    // Popup penceresi oluştur
+                    var popup = window.open('', '3DSecurePopup', 'width=600,height=400');
+
+                    // Popup penceresine HTML içeriğini yaz
+                    popup.document.write(htmlContent);
+
+                    // Popup penceresi kapandığında sonucu al
+                    var checkPopupClosed = setInterval(function() {
+                        if (popup.closed) {
+                            clearInterval(checkPopupClosed);
+                            // Popup kapatıldığında sonucu al
+                            fetch('http://local.paycell/purchase3d.php')
+                                .then(response => response.json())
+                                .then(result => {
+                                    console.log('3D Secure Result:', result);
+                                    // Burada doğrulama sonucunu işleyebilirsiniz
+                                });
+                        }
+                    }, 1000);
+                });
+        });
+    </script>
+</body>
+</html>

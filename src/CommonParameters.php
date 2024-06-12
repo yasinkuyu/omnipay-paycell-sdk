@@ -252,7 +252,7 @@ trait CommonParameters
      */
     public function getReferenceNumber()
     {
-        return $this->getPrefix() . $this->getParameter('referenceNumber');
+        return $this->getParameter('referenceNumber') ? $this->getPrefix() . $this->getParameter('referenceNumber') : " ";
     }
 
     /**
@@ -318,7 +318,7 @@ trait CommonParameters
      * @return string|null The transaction ID.
      */
     public function getTransactionId() {
-        return $this->getPrefix() . $this->getParameter('transactionId');
+        return $this->getParameter('transactionId') ? $this->getPrefix() . $this->getParameter('transactionId') : " ";
     }
 
     /**

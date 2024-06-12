@@ -7,36 +7,34 @@ require 'init.php';
 
 # https://paycell.com.tr/test-kredi-kartlari
 $response = $gateway->purchase3d([
-    'amount' => '1.00',
+    'amount' => '100.00',
     'currency' => 'TRY',
     'card' => [
-        'number' => '5406675406675403',
+        'number' => '5571135571135575',
         'expiryMonth' => '12',
         'expiryYear' => '26',
-        'cvv' => '000' 
-    ],
+        'cvv' => '000' // 3D secure code 123456
+    ], 
     // "installment" => 0,
-    "returnUrl" => "https://localhost/paycell/callback.php"
+    "returnUrl" => "http://localhost/paycell/callback.php" // Must be defined in the Paycell system
 ])->send();
 
 if ($response->isSuccessful()) {
     
-    echo "Purchase 3D Successful" . PHP_EOL;
+    echo "Purchase 3D start was successful" . PHP_EOL;
 
     echo PHP_EOL;
 
     // The transaction number to be used for return, reverse(void), and inquire(fetch) methods
     echo "ReferenceNumber: " . $gateway->getReferenceNumber() . PHP_EOL;
+    echo "getThreeDSessionId: " . $response->getThreeDSessionId() . PHP_EOL;
+    echo "getCardToken: " . $response->getCardToken() . PHP_EOL;
+    echo "getHashData: " . $response->getHashData() . PHP_EOL;
 
     echo "getMessage: " . $response->getMessage() . PHP_EOL;
     echo "getTransactionId: " . $response->getTransactionId() . PHP_EOL;
 
     echo "getExtraParameters: " . $response->getExtraParameters() . PHP_EOL;
-    echo "getOrderId: " . $response->getOrderId() . PHP_EOL;
-    echo "getAcquirerBankCode: " . $response->getAcquirerBankCode() . PHP_EOL;
-    echo "getIssuerBankCode: " . $response->getIssuerBankCode() . PHP_EOL;
-    echo "getApprovalCode: " . $response->getApprovalCode() . PHP_EOL;
-    echo "getReconciliationDate: " . $response->getReconciliationDate() . PHP_EOL;
 
     echo PHP_EOL;
 
@@ -47,5 +45,6 @@ if ($response->isSuccessful()) {
     }
 
 } else {
-    echo "Purchase 3D fail: " . $response->getMessage() . PHP_EOL;
+    echo "Purchase 3D start failed: " . $response->getMessage() . PHP_EOL;
+
 }

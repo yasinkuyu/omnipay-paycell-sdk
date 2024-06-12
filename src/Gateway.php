@@ -8,6 +8,7 @@ use Omnipay\Paycell\Message\RefundRequest;
 use Omnipay\Paycell\Message\InquireRequest;
 use Omnipay\Paycell\Message\ReverseRequest;
 use Omnipay\Paycell\Message\Purchase3DRequest;
+use Omnipay\Paycell\Message\Purchase3DCompleteRequest;
 
 /**
  * Paycell Gateway
@@ -60,6 +61,16 @@ class Gateway extends AbstractGateway
     }
 
     /**
+     * Initiate a reverse request.
+     *
+     * @return \Omnipay\Common\Message\AbstractRequest
+     */
+    public function reverse(array $parameters = [])
+    {
+        return $this->createRequest(ReverseRequest::class, $parameters);
+    }
+
+    /**
      * Initiate a purchase 3d request.
      *
      * @return \Omnipay\Common\Message\AbstractRequest
@@ -69,13 +80,14 @@ class Gateway extends AbstractGateway
         return $this->createRequest(Purchase3DRequest::class, $parameters);
     }
 
+
     /**
-     * Initiate a reverse request.
+     * Initiate a purchase 3d request.
      *
      * @return \Omnipay\Common\Message\AbstractRequest
      */
-    public function reverse(array $parameters = [])
+    public function completePurchase(array $parameters = [])
     {
-        return $this->createRequest(ReverseRequest::class, $parameters);
+        return $this->createRequest(Purchase3DCompleteRequest::class, $parameters);
     }
 }

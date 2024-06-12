@@ -1,30 +1,19 @@
 <?php
 
-// print_r($_POST);
-// getThreeDSessionResult
-// cardToken -> provision 
-// purchase adımlarını tekrar başlat
-
 require 'init.php';
 
-// Error: There was an invalid parameter 
-// Min length 20
+$threeDSessionId = $_GET['threeDSessionId'];
+$misisdn = $_GET['msisdn'];
+
 $gateway->setReferenceNumber(date("Ymdhissss")); // unique transaction reference number, order number etc... 
- 
-$response = $gateway->purchase([
-    'amount' => '10.00',
-    'currency' => 'TRY',
-    'card' => [
-        'number' => '5406675406675403',
-        'expiryMonth' => '12',
-        'expiryYear' => '26',
-        'cvv' => '000' 
-    ],
-])->send();
+$gateway->setThreeDSessionId($threeDSessionId);
+$gateway->setMsisdn($misisdn);
+
+$response = $gateway->completePurchase()->send();
 
 if ($response->isSuccessful()) {
 
-    echo "Payment Successful" . PHP_EOL;
+    echo "3D Payment Successful" . PHP_EOL;
 
     echo PHP_EOL;
 
@@ -35,12 +24,13 @@ if ($response->isSuccessful()) {
     echo "getTransactionId: " . $response->getTransactionId() . PHP_EOL;
 
     echo "getExtraParameters: " . $response->getExtraParameters() . PHP_EOL;
-    echo "getOrderId: " . $response->getOrderId() . PHP_EOL;
-    echo "getAcquirerBankCode: " . $response->getAcquirerBankCode() . PHP_EOL;
-    echo "getIssuerBankCode: " . $response->getIssuerBankCode() . PHP_EOL;
-    echo "getApprovalCode: " . $response->getApprovalCode() . PHP_EOL;
-    echo "getReconciliationDate: " . $response->getReconciliationDate() . PHP_EOL;
+    echo "getCurrentStep: " . $response->getCurrentStep() . PHP_EOL;
+    echo "getMdErrorMessage: " . $response->getMdErrorMessage() . PHP_EOL;
+    echo "getMdStatus: " . $response->getMdStatus() . PHP_EOL;
+    echo "getThreeDResult: " . $response->getThreeDResult() . PHP_EOL;
+    echo "getThreeDResultDescription: " . $response->getThreeDResultDescription() . PHP_EOL;
+
 
 } else {
-    echo "Payment fail: " . $response->getMessage() . PHP_EOL;
+    echo "3D Payment fail: " . $response->getMessage() . PHP_EOL;
 }

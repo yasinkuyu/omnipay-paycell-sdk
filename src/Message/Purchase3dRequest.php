@@ -1,7 +1,7 @@
 <?php
 
 namespace Omnipay\Paycell\Message;
- 
+
 use Omnipay\Paycell\CommonParameters;
 use Omnipay\Paycell\Helpers\HashService;
 use Omnipay\Paycell\Gateway;
@@ -36,7 +36,7 @@ class Purchase3DRequest extends AbstractRequest
         $cardTokenResponse->hashService = $hashService;
 
         $cardTokenResponse = new CardTokenResponse($this, $cardTokenResponse);
- 
+  
         if (!$cardTokenResponse->isSuccessful()) {
             throw new \Exception("Invalid card token. " . $cardTokenResponse->getMessage());
         }
@@ -50,7 +50,10 @@ class Purchase3DRequest extends AbstractRequest
     public function sendData($data)
     {
         $httpResponse = $this->getThreeDSession($data);
-         
+
+        $httpResponse->cardToken = $data['cardToken'];
+        $httpResponse->hashData = $data['hashData'];
+
         $httpResponse->redirectContentResponse = $this->threeDSecure([
             "threeDSessionId" => $httpResponse->threeDSessionId,
         ]);

@@ -310,24 +310,20 @@ abstract class PaycellService extends AbstractRequest
      * @param array $data An associative array containing the necessary data for the 3D secure session result request, such as the amount, currency, merchant code, MSISDN, reference number, and transaction type.
      * @return mixed The response from the Paycell service for the 3D secure session result request.
      */
-    public function getThreeDSessionResult(array $data)
+    public function getThreeDSessionResult()
     {
         $this->requestData = [
             "requestHeader" => $this->getRequestHeader(),
-            "amount" => $this->getAmountInteger(),
-            "currency" => $this->getCurrency(),
             "merchantCode" => $this->getMerchantCode(),
             "msisdn" => $this->getMsisdn(),
-            "referenceNumber" => $this->getReferenceNumber(),
-            "target" => 'MERCHANT',
-            "transactionType" => 'AUTH',
+            "threeDSessionId" =>  $this->getThreeDSessionId(),
         ];
 
         if ($this->getInstallment() > 0) {
             $this->requestData['installmentCount'] = $this->getInstallment();
         }
 
-        return $this->sendRequest('getCardToken/getThreeDSessionResult/', $data);
+        return $this->sendRequest('getCardToken/getThreeDSessionResult/', []);
     }
 
     /**
@@ -488,18 +484,18 @@ abstract class PaycellService extends AbstractRequest
      */
     public function threeDSecure(array $data)
     {
-        $this->requestData = [
-            "isPost3DResult" => null,
-            "callbackUrl" => $this->getReturnUrl(),
-        ];
+        $data['callbackurl'] = $this->getReturnUrl() . "?" . http_build_query([
+            'sessionToken' => bin2hex(random_bytes(100)),
+            'threeDSessionId' => $data['threeDSessionId'],
+            'msisdn' => $this->getMsisdn()
+        ]);
 
         $this->getEndpoint();
 
         $url = $this->paymentBaseUrl . "threeDSecure";
-        $data = array_merge($data, $this->requestData);
- print_r($data);
+ 
         $curl = curl_init();
-
+ 
         curl_setopt_array($curl, [
             CURLOPT_URL => $url,
             CURLOPT_RETURNTRANSFER => true,

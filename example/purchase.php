@@ -10,10 +10,10 @@ $response = $gateway->purchase([
     'amount' => '10.00',
     'currency' => 'TRY',
     'card' => [
-        'number' => '5406675406675403',
-        'expiryMonth' => '12',
-        'expiryYear' => '26',
-        'cvv' => '000' 
+        'number' => '5200190006338608',
+        'expiryMonth' => '01',
+        'expiryYear' => '30',
+        'cvv' => '410' // 3D secure code 123456
     ], 
     // "installment" => 0,
 ])->send();
