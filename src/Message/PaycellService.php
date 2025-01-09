@@ -39,13 +39,16 @@ use Omnipay\Paycell\Helpers\HashService;
  */
 abstract class PaycellService extends AbstractRequest
 {
+
+    // https://paycell.com.tr/paycell-sdk?q=querypaymentstatus
+
     public const PROD_INIT_URL = 'https://paycellsdk.paycell.com.tr/api/session/init';
     private const PROD_INIT_HOME_URL = 'https://paycellsdk.paycell.com.tr/home/[trackingId]';
-    private const PROD_QUERY_URL = 'https://paycellsdk.paycell.com.tr/api/session/init';
+    private const PROD_QUERY_URL = 'https://zone-ist.paycell.com.tr/tpay/zone/services/cancelrestful/cancelService/';
 
     private const TEST_INIT_URL = 'https://websdktest.turkcell.com.tr/api/session/init';
     private const TEST_INIT_HOME_URL = 'https://websdktest.turkcell.com.tr/home/[trackingId]';
-    private const TEST_QUERY_URL = 'https://tpay-test.turkcell.com.tr/tpay/provision/services/cancelrestful/cancelService/';
+    private const TEST_QUERY_URL = 'https://zone-test.turkcell.com.tr/tpay/zone/services/cancelrestful/cancelService/';
 
 	public static $queryStatu = "queryPaymentStatus/";
 	public static $reverse = "reversePayment/";
@@ -147,7 +150,9 @@ abstract class PaycellService extends AbstractRequest
         $data = array_merge($data, $this->requestData);
 
         $curl = curl_init();
-
+echo $url;
+echo PHP_EOL;
+print_r($data);
         curl_setopt_array($curl, [
             CURLOPT_URL => $url,
             CURLOPT_RETURNTRANSFER => true,
@@ -203,7 +208,7 @@ abstract class PaycellService extends AbstractRequest
             'amount' => $this->getAmountInteger(),
             'paymentSecurity' => $this->getPaymentSecurity(),
             'hostAccount' => $this->getHostAccount(),
-            'currency' => $this->getCurrency(),
+            'currency' => $this->getCurrency() === 'TRY' ? 99 : $this->getCurrency(),
             'installmentPlan' => $this->getInstallmentPlan()
         ]);
 
@@ -219,9 +224,9 @@ abstract class PaycellService extends AbstractRequest
             "language" => $this->getLanguage(), // tr or en
             "payment" => array(
                 "amount" => $this->getAmountInteger(),
-                "currency" => $this->getCurrency(),
-                "paymentSecurity" => $this->getPaymentSecurity(), // THREED_SECURE
+                "currency" => $this->getCurrency() === 'TRY' ? 99 : $this->getCurrency(),
                 "paymentReferenceNumber" => $paymentReferenceNumber,
+                "paymentSecurity" => $this->getPaymentSecurity(), // THREED_SECURE
                 "installmentPlan" => $this->getInstallmentPlan(),
             ),
             "returnUrl" => $returnUrl, // ReturnUrl, ödeme işlemi gerçekleştikten sonra kullanıcıyı üye işyerine yönlendirecek URL’yi içerir. Ödeme işlemi tamamlandığında sdk tarafından returnUrl ’e redirect  yapılır. Bu url dinlenerek status servis sorgulanmadan işlemin bittiği anlaşılabilir.
@@ -230,26 +235,7 @@ abstract class PaycellService extends AbstractRequest
         ];
  
         return $this->sendRequest('', $data);
-    }
-
-    /**
-     * Inquire about a payment.
-     *
-     * @param array $data
-     * @return mixed
-     */
-    public function inquire(array $data)
-    {
-        $this->requestData = [
-            "requestHeader" => $this->getRequestHeader(),
-            "merchantCode" => $this->getMerchantCode(),
-            "terminalCode" => $this->getTerminalCode(),
-            "referenceNumber" => $this->getReferenceNumber(),
-            "originalReferenceNumber" => $this->getOriginalReferenceNumber(),
-        ];
-
-        return $this->sendRequest('getCardToken/inquire/', $data);
-    }
+    } 
 
     /**
      * Reverse a payment.
@@ -262,18 +248,20 @@ abstract class PaycellService extends AbstractRequest
     public function reverse(array $data)
     {
         $this->requestData = [
-            "requestHeader" => $this->getRequestHeader(),
-            "amount" => $this->getAmountInteger(),
+            "requestHeader" => [
+                "applicationName" => $this->getApplicationName(),
+                "applicationPwd" => $this->getApplicationPwd(),
+                "clientIPAddress" => $this->getClientIPAddress(),
+                "transactionDateTime" => $this->getTransactionDateTime(),
+                "transactionId" => $this->getTransactionId(),
+            ],
             "merchantCode" => $this->getMerchantCode(),
-            "terminalCode" => $this->getTerminalCode(),
-            "referenceNumber" => $this->getReferenceNumber(),
+            "msisdn" => $this->getMsisdn(),
+            "referenceNumber" => $this->getPrefix() . $this->getTransactionId(),
             "originalReferenceNumber" => $this->getOriginalReferenceNumber(),
-            "paymentType" => $this->actionType,
-            "acquirerBankCode" => $this->getAcquirerBankCode(),
-            "threeDSessionId" => $this->getThreeDSessionId(),
         ];
 
-        return $this->sendRequest('reversePayment/', $data);
+        return $this->sendRequestPayment('reversePayment/', $data);
     }
 
     /**
@@ -287,15 +275,46 @@ abstract class PaycellService extends AbstractRequest
     public function refund(array $data)
     {
         $this->requestData = [
-            "requestHeader" => $this->getRequestHeader(),
-            "amount" => $this->getAmountInteger(),
+            "requestHeader" => [
+                "applicationName" => $this->getApplicationName(),
+                "applicationPwd" => $this->getApplicationPwd(),
+                "clientIPAddress" => $this->getClientIPAddress(),
+                "transactionDateTime" => $this->getTransactionDateTime(),
+                "transactionId" => $this->getTransactionId(),
+            ],
             "merchantCode" => $this->getMerchantCode(),
-            "terminalCode" => $this->getTerminalCode(),
-            "referenceNumber" => $this->getReferenceNumber(),
+            "msisdn" => $this->getMsisdn(),
+            "referenceNumber" => $this->getPrefix() . $this->getTransactionId(),
             "originalReferenceNumber" => $this->getOriginalReferenceNumber(),
+            "originalPaymentReferenceNumber" => $this->getOriginalPaymentReferenceNumber(),
+            "amount" => $this->getAmountInteger(),
         ];
 
-        return $this->sendRequest('refundPayment/', $data);
+        return $this->sendRequestPayment('refundPayment/', $data);
+    }
+
+    /**
+     * Query a payment.
+     *
+     * @param array $data
+     * @return mixed
+     */
+    public function query(array $data)
+    {
+
+        $this->requestData = [
+            "originalPaymentReferenceNumber" => $this->getOriginalPaymentReferenceNumber(),
+            "merchantCode" => $this->getMerchantCode(),
+            "requestHeader" => [
+                "applicationName" => $this->getApplicationName(),
+                "applicationPwd" => $this->getApplicationPwd(),
+                "clientIPAddress" => $this->getClientIPAddress(),
+                "transactionDateTime" => $this->getTransactionDateTime(),
+                "transactionId" => $this->getTransactionId(),
+            ],
+        ];
+
+        return $this->sendRequestPayment('queryPaymentStatus/', $data);
     }
 
     /**
@@ -305,7 +324,7 @@ abstract class PaycellService extends AbstractRequest
      */
     public function summaryReconciliation()
     {
-        return $this->sendRequest('summaryReconciliation/');
+        return $this->sendRequestPayment('summaryReconciliation/');
     }
  
 }

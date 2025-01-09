@@ -2,14 +2,11 @@
 
 require 'init.php';
 
-$threeDSessionId = $_GET['threeDSessionId'];
-$terminalCode = $_GET['terminalCode'];
+$paymentReferenceNumber = $_GET['paymentReferenceNumber'];
 
-$gateway->setReferenceNumber(date("Ymdhissss")); // unique transaction reference number, order number etc... 
-$gateway->setThreeDSessionId($threeDSessionId);
-$gateway->setTerminalCode($terminalCode);
-
-$response = $gateway->completePurchase()->send();
+$response = $gateway->query([
+    'originalPaymentReferenceNumber' => $paymentReferenceNumber,
+])->send();
 
 if ($response->isSuccessful()) {
 

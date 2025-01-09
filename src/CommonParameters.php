@@ -18,7 +18,7 @@ trait CommonParameters
             'applicationPwd' => '',
             'eulaID' => '',
             'merchantCode' => '',
-
+            'msisdn' => '',
             'installment' => " ",
 
             'secureCode' => '',
@@ -40,6 +40,7 @@ trait CommonParameters
             'paymentSecurity' => false,
             'referenceNumber' => " ",
             'originalReferenceNumber' => null,
+            'originalPaymentReferenceNumber' => null,
 
             // Three D Secure
             '3D' => false
@@ -47,6 +48,25 @@ trait CommonParameters
         ];
     }
 
+
+    /**
+     * Get the msisdn.
+     *
+     * @return mixed
+     */
+    public function getMsisdn() {
+        return $this->getParameter('msisdn');
+    }
+
+    /**
+     * Set the msisdn.
+     *
+     * @param mixed $value The msisdn value
+     * @return $this
+     */
+    public function setMsisdn($value) {
+        return $this->setParameter('msisdn', $value);
+    }   
 
     /**
     * Set the trackingId.
@@ -155,6 +175,7 @@ trait CommonParameters
     {
         return $this->getParameter('paymentReferenceNumber');
     }
+    
 
     /**
     * Set the amount.
@@ -517,6 +538,27 @@ trait CommonParameters
         return $this->getParameter('originalReferenceNumber');
     }
 
+    /** 
+     * Set the originalPaymentReferenceNumber.
+     * 
+     * @param mixed $value The originalPaymentReferenceNumber value
+     * @return $this
+     */
+    public function setOriginalPaymentReferenceNumber($value)
+    {
+        return $this->setParameter('originalPaymentReferenceNumber', $value);
+    }
+
+    /**
+     * Get the originalPaymentReferenceNumber.
+     * 
+     * @return mixed
+     */
+    public function getOriginalPaymentReferenceNumber()
+    {
+        return $this->getParameter('originalPaymentReferenceNumber');
+    }
+
     /**
      * Set the merchant code.
      * 
@@ -537,7 +579,7 @@ trait CommonParameters
      * @return string|null The transaction date and time.
      */
     public function getTransactionDateTime() {
-        return $this->getParameter('transactionDateTime');
+        return $this->getParameter('transactionDateTime') ? $this->getPrefix() . $this->getParameter('transactionDateTime') : " ";
     }
 
     /**

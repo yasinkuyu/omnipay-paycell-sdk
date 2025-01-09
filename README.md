@@ -60,7 +60,7 @@ cd /YOUR-PATH/vendor/yasinkuyu/omnipay-paycell-sdk/example
 php -S localhost:8000
 ```
 
-4. Open test page in browser: `http://localhost:8000/payment.php`
+4. Open test page in browser: `http://localhost:8000/purchase.php`
 
 ## Test Cards
 

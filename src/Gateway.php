@@ -9,7 +9,7 @@ use Omnipay\Paycell\Message\InquireRequest;
 use Omnipay\Paycell\Message\ReverseRequest;
 use Omnipay\Paycell\Message\Purchase3DRequest;
 use Omnipay\Paycell\Message\Purchase3DCompleteRequest;
-
+use Omnipay\Paycell\Message\QueryRequest;
 /**
  * Paycell Gateway
  * 
@@ -69,5 +69,15 @@ class Gateway extends AbstractGateway
     {
         return $this->createRequest(ReverseRequest::class, $parameters);
     }
+
+    /**
+     * Initiate a query request.
+     *
+     * @return \Omnipay\Common\Message\AbstractRequest
+     */ 
+    public function query(array $parameters = [])
+    {
+        return $this->createRequest(QueryRequest::class, $parameters);
+    }   
 
 }

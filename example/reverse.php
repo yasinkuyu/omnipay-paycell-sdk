@@ -5,11 +5,10 @@ require 'init.php';
 $gateway->setReferenceNumber(date("Ymdhis"));
 
 // The transaction number to be used for return, reverse(void), and inquire(fetch) methods
-$gateway->setOriginalReferenceNumber("66620240530045825252525");
+$gateway->setOriginalReferenceNumber("00120250109210408000");
+$gateway->setMsisdn("905322108110");
 
-$response = $gateway->reverse([
-    'amount' => '10.00',
-])->send();
+$response = $gateway->reverse()->send();
 
 if ($response->isSuccessful()) {
 

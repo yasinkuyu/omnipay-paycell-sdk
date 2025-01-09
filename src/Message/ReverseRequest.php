@@ -31,7 +31,7 @@ class ReverseRequest extends AbstractRequest
     public function sendData($data)
     {
         $httpResponse = $this->reverse($data);
-
+print_r($httpResponse);
         return $this->createResponse($httpResponse);
     }
 

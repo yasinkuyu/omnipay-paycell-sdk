@@ -5,12 +5,12 @@ require 'init.php';
 // Error: There was an invalid parameter 
 // Min length 20
 $gateway->setReferenceNumber(date("Ymdhissss")); // unique transaction reference number, order number etc... 
-$gateway->setHostAccount("yasinkuyu@gmail.com");
+$gateway->setHostAccount("xxxxxx@xxxx.com");
 $gateway->setPaymentSecurity("NON_THREED_SECURE"); // THREED_SECURE
 $gateway->setLanguage("tr");
 
-$gateway->setReturnUrl("http://localhost:4200/?trackingId=[paymentReferenceNumber]");
-$gateway->setPostResultUrl("http://localhost:4200/handleInitResult.php");
+$gateway->setReturnUrl("http://localhost:8002/query.php?paymentReferenceNumber=[paymentReferenceNumber]");
+$gateway->setPostResultUrl("http://localhost:8002/handleInitResult.php");
 
 $gateway->setInstallmentPlan(
     array(
@@ -24,10 +24,8 @@ $gateway->setInstallmentPlan(
     )
 ); 
 
-
 // test scure code 1111
 // test card Denizbank	5200190006338608	01	30	410	123456 (https://paycell.com.tr/test-kredi-kartlari)
-
 
 $response = $gateway->purchase([
     'amount' => '1.00',
@@ -36,13 +34,11 @@ $response = $gateway->purchase([
 
 if ($response->isSuccessful()) {
 
-    // Status’ten gelecek sonuç enum tipindedir. 0 için SUCCESS, 1 için PENDING, 2 için CANCELLED ve 3 için NOTFOUND değerlerinden biridir.
-
-
+    // The result from Status is an enum type. Values are: 0 for SUCCESS, 1 for PENDING, 2 for CANCELLED, and 3 for NOTFOUND
     echo "Purchase successful, redirect wait..." . PHP_EOL;
 
     echo PHP_EOL;
-
+ 
     echo "trackingId: " . $response->getTrackingId() . PHP_EOL;
     echo "trackingUrl: " . $response->getTrackingUrl() . PHP_EOL;
 
@@ -60,14 +56,7 @@ if ($response->isSuccessful()) {
     echo "ReferenceNumber: " . $gateway->getReferenceNumber() . PHP_EOL;
 
     echo "getMessage: " . $response->getMessage() . PHP_EOL;
-    echo "getTransactionId: " . $response->getTransactionId() . PHP_EOL;
-
-    echo "getExtraParameters: " . $response->getExtraParameters() . PHP_EOL;
-    echo "getOrderId: " . $response->getOrderId() . PHP_EOL;
-    echo "getAcquirerBankCode: " . $response->getAcquirerBankCode() . PHP_EOL;
-    echo "getIssuerBankCode: " . $response->getIssuerBankCode() . PHP_EOL;
-    echo "getApprovalCode: " . $response->getApprovalCode() . PHP_EOL;
-    echo "getReconciliationDate: " . $response->getReconciliationDate() . PHP_EOL;
+    
    
 } else {
     echo "Purchase fail: " . $response->getMessage() . PHP_EOL;
