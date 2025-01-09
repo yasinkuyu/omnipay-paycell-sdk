@@ -3,40 +3,76 @@
 namespace Omnipay\Paycell\Message;
 
 use Omnipay\Common\Message\AbstractRequest;
+use Omnipay\Paycell\Helpers\HashService;
 
 /**
- * Paycell
+ *   Paycell Web SDK entegrasyonu için Paycell tarafından sağlanması gereken bilgiler;
+ *
+ *   Merchant Code
+ *   Terminal Code
+ *   Secure Code
+ *   Application Name
+ *   Application Password
  * 
+ *   Paycell Web SDK’ya atacağınız requestleri göndereceğiniz URL’ler:
+ *   https://websdktest.turkcell.com.tr/api/session/init
+ *   https://websdktest.turkcell.com.tr/home/[trackingId]
+ *   Paycell Web SDK, Init ve Status servislerinden meydana gelmektedir.
+ *
+ *   1. Init Servisi: Ödeme işlemi başlatılıp alınan tracking ID ile Paycell arayüzüne erişim sağlanır.
+ *   2. Validation: Kullanıcının Paycell sistemine giriş yapıp ödemesini tamamlaması sağlanır.
+ *   3. Status servisi: Başlatılan ödemenin son durumu hakkında sorgulama yapılır.
+ * 
+ *   Üye iş yeri, yapacağı SDK entegrasyonu ile Paycell servislerine erişim sağlamış olacaktır. Akış şu sırada ilerleyecektir.
+ *
+ *   - Üye iş yeri uygulamasında, doğrulanmış bir kullanıcı ödeme adımında “Turkcell Paycell ile Öde” butonuna basar.
+ *   - Üye işyeri uygulaması “init” servisini çağırır. (https://websdktest.turkcell.com.tr/api/session/init )
+ *   - Init servisi cevabında işlem başarılı olursa trackingID üretilir.
+ *   - TrackingID bilgisi kullanılarak https://websdktest.turkcell.com.tr/home/[trackingId] linkin sonuna TrackingID eklenerek kullanıcı, sayfaya iframe içinde ya da yeni sekmede açılarak yönlendirilir.
+ *   - Bu sayfanın yönlendirilmesi ile üye iş yeri, arka planda trackingID bilgisini kullanarak Status servisini çağırır ve işlemin sonucunu başarılı ya da başarısız olarak öğrenmek için sürekli sorgular.
+ *   - Status’ten gelecek sonuç enum tipindedir. 0 için SUCCESS, 1 için PENDING, 2 için CANCELLED ve 3 için NOTFOUND değerlerinden biridir.
+ *   - Sonucun alınması ile üye iş yeri sonuç bilgisini kullanıcıya gösterir.
+ *
  * (c) Yasin Kuyu
  * 2024, insya.com
- * http://www.github.com/yasinkuyu/omnipay-paycell
+ * http://www.github.com/yasinkuyu/omnipay-paycell-sdk
  */
 abstract class PaycellService extends AbstractRequest
 {
-    private const PROD_BASE_URL = 'https://tpay.turkcell.com.tr/tpay/provision/services/restful/';
-    private const PROD_PAYMENT_BASE_URL = 'https://epayment.turkcell.com.tr/paymentmanagement/rest/';
+    public const PROD_INIT_URL = 'https://paycellsdk.paycell.com.tr/api/session/init';
+    private const PROD_INIT_HOME_URL = 'https://paycellsdk.paycell.com.tr/home/[trackingId]';
+    private const PROD_QUERY_URL = 'https://paycellsdk.paycell.com.tr/api/session/init';
 
-    private const TEST_BASE_URL = 'https://tpay-test.turkcell.com.tr:443/tpay/provision/services/restful/';
-    private const TEST_PAYMENT_BASE_URL = 'https://omccstb.turkcell.com.tr/paymentmanagement/rest/';
+    private const TEST_INIT_URL = 'https://websdktest.turkcell.com.tr/api/session/init';
+    private const TEST_INIT_HOME_URL = 'https://websdktest.turkcell.com.tr/home/[trackingId]';
+    private const TEST_QUERY_URL = 'https://tpay-test.turkcell.com.tr/tpay/provision/services/cancelrestful/cancelService/';
 
-    private $baseUrl;
-    private $paymentBaseUrl;
+	public static $queryStatu = "queryPaymentStatus/";
+	public static $reverse = "reversePayment/";
+	public static $refund = "refundPayment/";
+	public static $summaryReconciliation = "summaryReconciliation/";
+
+    private $initUrl;
+    private $initHomeUrl;
+    private $queryUrl;
 
     private $requestData = [];
 
     /**
      * Sets the endpoint URLs based on the test mode.
      * 
-     * This method sets the `$baseUrl` and `$paymentBaseUrl` properties based on the value of the `$testMode` property. If `$testMode` is false, the production URLs are used. Otherwise, the test URLs are used.
+     * This method sets the `$initUrl` and `$queryUrl` properties based on the value of the `$testMode` property. If `$testMode` is false, the production URLs are used. Otherwise, the test URLs are used.
      */
     public function getEndpoint(): void
     {
         if ($this->getTestMode() === false) {
-            $this->baseUrl = self::PROD_BASE_URL;
-            $this->paymentBaseUrl = self::PROD_PAYMENT_BASE_URL;
+            $this->initUrl = self::PROD_INIT_URL;
+            $this->initHomeUrl = self::PROD_INIT_HOME_URL;
+            $this->queryUrl = self::PROD_QUERY_URL;
         } else {
-            $this->baseUrl = self::TEST_BASE_URL;
-            $this->paymentBaseUrl = self::TEST_PAYMENT_BASE_URL;
+            $this->initUrl = self::TEST_INIT_URL;
+            $this->initHomeUrl = self::TEST_INIT_HOME_URL;
+            $this->queryUrl = self::TEST_QUERY_URL;
         }
     }
 
@@ -55,11 +91,17 @@ abstract class PaycellService extends AbstractRequest
     private function getRequestHeader(): array
     {
         return [
+            "merchant" => array(
+                "merchantCode" => $this->getMerchantCode(),
+                "terminalCode" => $this->getTerminalCode(),
+                "logos" => null,
+            ),
+            "transactionInfo" => array(
+                "transactionDateTime" => $this->getTransactionDateTime(),
+                "transactionId" => $this->getTransactionId(),
+            ),
             "applicationName" => $this->getApplicationName(),
-            "applicationPwd" => $this->getApplicationPwd(),
-            "clientIPAddress" => $this->getClientIPAddress(),
-            "transactionDateTime" => $this->getTransactionDateTime(),
-            "transactionId" => $this->getTransactionId()
+            "applicationPassword" => $this->getApplicationPwd(),
         ];
     }
 
@@ -73,7 +115,7 @@ abstract class PaycellService extends AbstractRequest
     private function sendRequest(string $endpoint, array $data = [])
     {
         $this->getEndpoint();
-        return $this->executeRequest($this->baseUrl . $endpoint, $data);
+        return $this->executeRequest($this->initUrl . $endpoint, $data);
     }
 
     /**
@@ -86,7 +128,7 @@ abstract class PaycellService extends AbstractRequest
     private function sendRequestPayment(string $endpoint, array $data = [])
     {
         $this->getEndpoint();
-        return $this->executeRequest($this->paymentBaseUrl . $endpoint, $data);
+        return $this->executeRequest($this->queryUrl . $endpoint, $data);
     }
 
     /**
@@ -101,6 +143,7 @@ abstract class PaycellService extends AbstractRequest
      */
     private function executeRequest(string $url, array $data)
     {
+
         $data = array_merge($data, $this->requestData);
 
         $curl = curl_init();
@@ -129,50 +172,15 @@ abstract class PaycellService extends AbstractRequest
             throw new \Exception("Empty response received from cURL request");
         }
 
-        return json_decode($httpResponse);
-    }
+        $httpResponse = json_decode($httpResponse);
 
-    // Provision Services
-    /**
-     * Get cards information.
-     *
-     * @return mixed
-     */
-    public function getCards()
-    {
-        return $this->sendRequest('getCardToken/getCards/');
-    }
+        if(isset($httpResponse->trackingId)){
+            $httpResponse->trackingUrl = str_replace('[trackingId]', $httpResponse->trackingId, $this->initHomeUrl);
+        }
 
-    /**
-     * Register a new card.
-     *
-     * @return mixed
-     */
-    public function registerCard()
-    {
-        return $this->sendRequest('getCardToken/registerCard/');
+        return $httpResponse;
     }
-
-    /**
-     * Update card information.
-     *
-     * @return mixed
-     */
-    public function updateCard()
-    {
-        return $this->sendRequest('getCardToken/updateCard/');
-    }
-
-    /**
-     * Delete card information.
-     *
-     * @return mixed
-     */
-    public function deleteCard()
-    {
-        return $this->sendRequest('getCardToken/deleteCard/');
-    }
-
+ 
     /**
      * Provision a payment.
      * 
@@ -183,21 +191,45 @@ abstract class PaycellService extends AbstractRequest
      */
     public function provision(array $data)
     {
-        $this->validate('card');
+
+        $requestHeader = $this->getRequestHeader();
+        $paymentReferenceNumber = $requestHeader["transactionInfo"]["transactionId"];
+        $returnUrl = str_replace("[paymentReferenceNumber]", $paymentReferenceNumber, $this->getReturnUrl());
+        
+        $hashService = new HashService([
+            'secureCode' => $this->getSecureCode(),
+            'terminalCode' => $this->getTerminalCode(),
+            'paymentReferenceNumber' => $paymentReferenceNumber,
+            'amount' => $this->getAmountInteger(),
+            'paymentSecurity' => $this->getPaymentSecurity(),
+            'hostAccount' => $this->getHostAccount(),
+            'currency' => $this->getCurrency(),
+            'installmentPlan' => $this->getInstallmentPlan()
+        ]);
+
+        $transactionDateTime = $requestHeader["transactionInfo"]["transactionDateTime"];
+        $transactionId = $requestHeader["transactionInfo"]["transactionId"];
+
+        $requestHashData = $hashService->generateRequestHash($transactionId, $transactionDateTime);
 
         $this->requestData = [
-            "requestHeader" => $this->getRequestHeader(),
-            "cardId" => $this->getCardId(),
-            "merchantCode" => $this->getMerchantCode(),
-            "msisdn" => $this->getMsisdn(),
-            "referenceNumber" => $this->getReferenceNumber(),
-            "amount" => $this->getAmountInteger(),
-            "paymentType" => $this->actionType,
-            "acquirerBankCode" => $this->getAcquirerBankCode(),
-            "threeDSessionId" => $this->getThreeDSessionId(),
+            "requestHeader" => $requestHeader,
+            "hashData" => $requestHashData,
+            "hostAccount" => $this->getHostAccount(), // Üye iş yeri uygulamasında ödemeyi yapan kullanıcıyı tekil olarak ifade eden değerdir. Üye işyeri uygulamasında kullanıcı doğrulaması mail adresi ile yapılıyorsa bu alanda mail adresi gönderilebilir.
+            "language" => $this->getLanguage(), // tr or en
+            "payment" => array(
+                "amount" => $this->getAmountInteger(),
+                "currency" => $this->getCurrency(),
+                "paymentSecurity" => $this->getPaymentSecurity(), // THREED_SECURE
+                "paymentReferenceNumber" => $paymentReferenceNumber,
+                "installmentPlan" => $this->getInstallmentPlan(),
+            ),
+            "returnUrl" => $returnUrl, // ReturnUrl, ödeme işlemi gerçekleştikten sonra kullanıcıyı üye işyerine yönlendirecek URL’yi içerir. Ödeme işlemi tamamlandığında sdk tarafından returnUrl ’e redirect  yapılır. Bu url dinlenerek status servis sorgulanmadan işlemin bittiği anlaşılabilir.
+            "postResultUrl" => $this->getPostResultUrl(), // Bu URL’e işlem başarılı , başarısız olarak tamamlandığında veya timeout alıdığında Paycell WEB SDK tarafından ödemeye ait bilgi ve statü post edilir. Burada gleen bilgiler Üye işyeri tarafından yorumlanarak aksiyon alınabilir.
+            "timeoutDuration" => 600000, // 600000, // Üye işyerinin alışveriş için verdiği toplam zamandır
         ];
-
-        return $this->sendRequest('getCardToken/provision/', $data);
+ 
+        return $this->sendRequest('', $data);
     }
 
     /**
@@ -211,7 +243,7 @@ abstract class PaycellService extends AbstractRequest
         $this->requestData = [
             "requestHeader" => $this->getRequestHeader(),
             "merchantCode" => $this->getMerchantCode(),
-            "msisdn" => $this->getMsisdn(),
+            "terminalCode" => $this->getTerminalCode(),
             "referenceNumber" => $this->getReferenceNumber(),
             "originalReferenceNumber" => $this->getOriginalReferenceNumber(),
         ];
@@ -233,7 +265,7 @@ abstract class PaycellService extends AbstractRequest
             "requestHeader" => $this->getRequestHeader(),
             "amount" => $this->getAmountInteger(),
             "merchantCode" => $this->getMerchantCode(),
-            "msisdn" => $this->getMsisdn(),
+            "terminalCode" => $this->getTerminalCode(),
             "referenceNumber" => $this->getReferenceNumber(),
             "originalReferenceNumber" => $this->getOriginalReferenceNumber(),
             "paymentType" => $this->actionType,
@@ -241,7 +273,7 @@ abstract class PaycellService extends AbstractRequest
             "threeDSessionId" => $this->getThreeDSessionId(),
         ];
 
-        return $this->sendRequest('getCardToken/reverse/', $data);
+        return $this->sendRequest('reversePayment/', $data);
     }
 
     /**
@@ -258,12 +290,12 @@ abstract class PaycellService extends AbstractRequest
             "requestHeader" => $this->getRequestHeader(),
             "amount" => $this->getAmountInteger(),
             "merchantCode" => $this->getMerchantCode(),
-            "msisdn" => $this->getMsisdn(),
+            "terminalCode" => $this->getTerminalCode(),
             "referenceNumber" => $this->getReferenceNumber(),
             "originalReferenceNumber" => $this->getOriginalReferenceNumber(),
         ];
 
-        return $this->sendRequest('getCardToken/refund/', $data);
+        return $this->sendRequest('refundPayment/', $data);
     }
 
     /**
@@ -273,253 +305,7 @@ abstract class PaycellService extends AbstractRequest
      */
     public function summaryReconciliation()
     {
-        return $this->sendRequest('getCardToken/summaryReconciliation/');
+        return $this->sendRequest('summaryReconciliation/');
     }
-
-    /**
-     * Get 3D secure session.
-     *
-     * This method is used to get a 3D secure session for a payment transaction. It sends a request to the Paycell service to initiate the 3D secure session, using the provided data.
-     *
-     * @param array $data An associative array containing the necessary data for the 3D secure session request, such as the amount, merchant code, MSISDN, and transaction type.
-     * @return mixed The response from the Paycell service for the 3D secure session request.
-     */
-    public function getThreeDSession(array $data)
-    {
-        $this->requestData = [
-            "requestHeader" => $this->getRequestHeader(),
-            "amount" => $this->getAmountInteger(),
-            "merchantCode" => $this->getMerchantCode(),
-            "msisdn" => $this->getMsisdn(),
-            "target" => 'MERCHANT',
-            "transactionType" => 'AUTH',
-        ];
-
-        if ($this->getInstallment() > 0) {
-            $this->requestData['installmentCount'] = $this->getInstallment();
-        }
-
-        return $this->sendRequest('getCardToken/getThreeDSession/', $data);
-    }
-
-    /**
-     * Get 3D secure session result.
-     *
-     * This method is used to get the result of a 3D secure session for a payment transaction. It sends a request to the Paycell service to retrieve the 3D secure session result, using the provided data.
-     *
-     * @param array $data An associative array containing the necessary data for the 3D secure session result request, such as the amount, currency, merchant code, MSISDN, reference number, and transaction type.
-     * @return mixed The response from the Paycell service for the 3D secure session result request.
-     */
-    public function getThreeDSessionResult()
-    {
-        $this->requestData = [
-            "requestHeader" => $this->getRequestHeader(),
-            "merchantCode" => $this->getMerchantCode(),
-            "msisdn" => $this->getMsisdn(),
-            "threeDSessionId" =>  $this->getThreeDSessionId(),
-        ];
-
-        if ($this->getInstallment() > 0) {
-            $this->requestData['installmentCount'] = $this->getInstallment();
-        }
-
-        return $this->sendRequest('getCardToken/getThreeDSessionResult/', []);
-    }
-
-    /**
-     * Get provision history.
-     *
-     * @param array $data
-     * @return mixed
-     */
-    public function getProvisionHistory(array $data)
-    {
-        return $this->sendRequest('getCardToken/getProvisionHistory/', $data);
-    }
-
-    /**
-     * Provision for Marketplace.
-     *
-     * @param array $data
-     * @return mixed
-     */
-    public function provisionForMarketPlace(array $data)
-    {
-        return $this->sendRequest('getCardToken/provisionForMarketPlace/', $data);
-    }
-
-    /**
-     * Get terms of service content.
-     *
-     * @return mixed
-     */
-    public function getTermsOfServiceContent()
-    {
-        return $this->sendRequest('getCardToken/getTermsOfServiceContent/');
-    }
-
-    /**
-     * Get card BIN information.
-     *
-     * @param array $data
-     * @return mixed
-     */
-    public function getCardBinInformation(array $data)
-    {
-        return $this->sendRequest('getCardToken/getCardBinInformation/', $data);
-    }
-
-    /**
-     * Get payment methods.
-     *
-     * @return mixed
-     */
-    public function getPaymentMethods()
-    {
-        return $this->sendRequest('getCardToken/getPaymentMethods/');
-    }
-
-    /**
-     * Open mobile payment.
-     *
-     * @param array $data
-     * @return mixed
-     */
-    public function openMobilePayment(array $data)
-    {
-        return $this->sendRequest('getCardToken/openMobilePayment/', $data);
-    }
-
-    /**
-     * Send OTP (One Time Password).
-     *
-     * @param array $data
-     * @return mixed
-     */
-    public function sendOTP(array $data)
-    {
-        return $this->sendRequest('getCardToken/sendOTP/', $data);
-    }
-
-    /**
-     * Validate OTP (One Time Password).
-     *
-     * @param array $data
-     * @return mixed
-     */
-    public function validateOTP(array $data)
-    {
-        return $this->sendRequest('getCardToken/validateOTP/', $data);
-    }
-
-    /**
-     * Provision all.
-     *
-     * @param array $data
-     * @return mixed
-     */
-    public function provisionAll(array $data)
-    {
-        return $this->sendRequest('getCardToken/provisionAll/', $data);
-    }
-
-    /**
-     * Inquire all.
-     *
-     * @param array $data
-     * @return mixed
-     */
-    public function inquireAll(array $data)
-    {
-        return $this->sendRequest('getCardToken/inquireAll/', $data);
-    }
-
-    /**
-     * Refund all.
-     *
-     * @param array $data
-     * @return mixed
-     */
-    public function refundAll(array $data)
-    {
-        return $this->sendRequest('getCardToken/refundAll/', $data);
-    }
-
-    /**
-     * Get a secure card token.
-     *
-     * This method validates the credit card information, retrieves the card details, and sends a request to the payment gateway to get a secure card token.
-     *
-     * @param string $requestHashData The hash data required for the secure card token request.
-     * @return mixed The response from the secure card token request.
-     */
-    public function getCardTokenSecure(string $requestHashData, $transactionId, $transactionDateTime)
-    {
-        $this->validate('card');
-
-        $card = $this->getCard();
-
-        $this->requestData = [
-            "header" => [
-                "applicationName" => $this->getApplicationName(),
-                "transactionId" => $transactionId,
-                "transactionDateTime" => $transactionDateTime,
-            ],
-
-            "hashData" => $requestHashData,
-            "creditCardNo" => $card->getNumber(),
-            "expireDateMonth" => $card->getExpiryDate('m'),
-            "expireDateYear" => $card->getExpiryDate('Y'),
-            "cvcNo" => $card->getCvv(),
-        ];
-
-        return $this->sendRequestPayment('getCardTokenSecure');
-    }
-
-    /**
-     * Performs a 3D Secure redirect for a payment transaction.
-     *
-     * @param array $data An array of data required for the 3D Secure redirect, such as payment details.
-     * @return mixed The response from the 3D Secure redirect request.
-     */
-    public function threeDSecure(array $data)
-    {
-        $data['callbackurl'] = $this->getReturnUrl() . "?" . http_build_query([
-            'sessionToken' => bin2hex(random_bytes(100)),
-            'threeDSessionId' => $data['threeDSessionId'],
-            'msisdn' => $this->getMsisdn()
-        ]);
-
-        $this->getEndpoint();
-
-        $url = $this->paymentBaseUrl . "threeDSecure";
  
-        $curl = curl_init();
- 
-        curl_setopt_array($curl, [
-            CURLOPT_URL => $url,
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_ENCODING => "",
-            CURLOPT_TIMEOUT => 30,
-            CURLOPT_SSL_VERIFYPEER => 1,
-            CURLOPT_POSTFIELDS => http_build_query($data),
-            CURLOPT_HTTPHEADER => [
-                "Content-Type: application/x-www-form-urlencoded",
-            ],
-        ]);
-
-        $httpResponse = curl_exec($curl);
-
-        if ($httpResponse === false) {
-            throw new \Exception("cURL request failed: " . curl_error($curl));
-        }
-
-        curl_close($curl);
-
-        if (empty($httpResponse)) {
-            throw new \Exception("Empty response received from cURL request");
-        }
-
-        return $httpResponse;
-    }
 }

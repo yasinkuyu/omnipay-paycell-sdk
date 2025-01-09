@@ -3,11 +3,11 @@
 require 'init.php';
 
 $threeDSessionId = $_GET['threeDSessionId'];
-$misisdn = $_GET['msisdn'];
+$terminalCode = $_GET['terminalCode'];
 
 $gateway->setReferenceNumber(date("Ymdhissss")); // unique transaction reference number, order number etc... 
 $gateway->setThreeDSessionId($threeDSessionId);
-$gateway->setMsisdn($misisdn);
+$gateway->setTerminalCode($terminalCode);
 
 $response = $gateway->completePurchase()->send();
 

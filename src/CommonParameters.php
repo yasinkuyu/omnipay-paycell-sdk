@@ -8,41 +8,325 @@ trait CommonParameters
     public function getDefaultParameters()
     {
 
-        $transactionDateTime = substr(date_format(new \DateTime(), "YmdHisu"), 0, 17);
-
+        $transactionDateTime = substr(date("YmdHisu"), 0, 17);
+ 
         return [
 
             // default parameters
             'prefix' => '',
             'applicationName' => '',
             'applicationPwd' => '',
-            'secureCode' => '',
             'eulaID' => '',
             'merchantCode' => '',
 
             'installment' => " ",
 
+            'secureCode' => '',
+            'terminalCode' => '',
+            'paymentReferenceNumber' => '',
+            'amount' => '',
+            'paymentSecurity' => 'NON_THREED_SECURE',
+            'hostAccount' => 'xxxxxx@xxxx.com',
+            'currency' => '99',
+            'installmentPlan' => array(),
+            'language' => 'tr',
+
+            'postResultUrl' => '',
+            'returnUrl' => '',
+
             'transactionDateTime' => $transactionDateTime, // YYYYMMddHHmmssSSS
             'transactionId' => $transactionDateTime,
-            
-            'msisdn' => null,
 
             'paymentSecurity' => false,
             'referenceNumber' => " ",
             'originalReferenceNumber' => null,
-
-            'cardId' => null,
-            'cardToken' => null,
-            'pin' => null,
-            'pointAmount' => null,
-            'threeDSessionId' => " ",
-            'acquirerBankCode' => null,
 
             // Three D Secure
             '3D' => false
 
         ];
     }
+
+
+    /**
+    * Set the trackingId.
+    *
+    * @param mixed $value The trackingId value
+    * @return $this
+    */
+    public function setTrackingId($value)
+    {
+        return $this->setParameter('trackingId', $value);
+    }
+
+    /**
+    * Get the trackingId.
+    *
+    * @return mixed
+    */
+    public function getTrackingId()
+    {
+        return $this->getParameter('trackingId');
+    }
+
+    /**
+    * Set the trackingUrl.
+    *
+    * @param mixed $value The trackingUrl value
+    * @return $this
+    */
+    public function setTrackingUrl($value)
+    {
+        return $this->setParameter('trackingUrl', $value);
+    }
+
+    /**
+    * Get the trackingUrl.
+    *
+    * @return mixed
+    */
+    public function getTrackingUrl()
+    {
+        return $this->getParameter('trackingUrl');
+    }
+
+
+
+    
+    /**
+     * Set the secureCode.
+    *
+    * @param mixed $value The secureCode value
+    * @return $this
+    */
+    public function setSecureCode($value)
+    {
+        return $this->setParameter('secureCode', $value);
+    }
+
+    /**
+    * Get the secureCode.
+    *
+    * @return mixed
+    */
+    public function getSecureCode()
+    {
+        return $this->getParameter('secureCode');
+    }
+
+    /**
+    * Set the terminalCode.
+    *
+    * @param mixed $value The terminalCode value
+    * @return $this
+    */
+    public function setTerminalCode($value)
+    {
+        return $this->setParameter('terminalCode', $value);
+    }
+
+    /**
+    * Get the terminalCode.
+    *
+    * @return mixed
+    */
+    public function getTerminalCode()
+    {
+        return $this->getParameter('terminalCode');
+    }
+
+    /**
+    * Set the paymentReferenceNumber.
+    *
+    * @param mixed $value The paymentReferenceNumber value
+    * @return $this
+    */
+    public function setPaymentReferenceNumber($value)
+    {
+        return $this->setParameter('paymentReferenceNumber', $value);
+    }
+
+    /**
+    * Get the paymentReferenceNumber.
+    *
+    * @return mixed
+    */
+    public function getPaymentReferenceNumber()
+    {
+        return $this->getParameter('paymentReferenceNumber');
+    }
+
+    /**
+    * Set the amount.
+    *
+    * @param mixed $value The amount value
+    * @return $this
+    */
+    public function setAmount($value)
+    {
+        return $this->setParameter('amount', $value);
+    }
+
+    /**
+    * Get the amount.
+    *
+    * @return mixed
+    */
+    public function getAmount()
+    {
+        return $this->getParameter('amount');
+    }
+
+    /**
+    * Set the paymentSecurity.
+    *
+    * @param mixed $value The paymentSecurity value
+    * @return $this
+    */
+    public function setPaymentSecurity($value)
+    {
+        return $this->setParameter('paymentSecurity', $value);
+    }
+
+    /**
+    * Get the paymentSecurity.
+    *
+    * @return mixed
+    */
+    public function getPaymentSecurity()
+    {
+        return $this->getParameter('paymentSecurity');
+    }
+
+    /**
+    * Set the hostAccount.
+    *
+    * @param mixed $value The hostAccount value
+    * @return $this
+    */
+    public function setHostAccount($value)
+    {
+        return $this->setParameter('hostAccount', $value);
+    }
+
+    /**
+    * Get the hostAccount.
+    *
+    * @return mixed
+    */
+    public function getHostAccount()
+    {
+        return $this->getParameter('hostAccount');
+    }
+
+    /**
+    * Set the currency.
+    *
+    * @param mixed $value The currency value
+    * @return $this
+    */
+    public function setCurrency($value)
+    {
+        return $this->setParameter('currency', $value);
+    }
+
+    /**
+    * Get the currency.
+    *
+    * @return mixed
+    */
+    public function getCurrency()
+    {
+        return $this->getParameter('currency');
+    }
+
+    /**
+    * Set the installmentPlan.
+    *
+    * @param mixed $value The installmentPlan value
+    * @return $this
+    */
+    public function setInstallmentPlan($value)
+    {
+        return $this->setParameter('installmentPlan', $value);
+    }
+
+    /**
+    * Get the installmentPlan.
+    *
+    * @return mixed
+    */
+    public function getInstallmentPlan()
+    {
+        return $this->getParameter('installmentPlan');
+    }
+
+    /**
+    * Set the language.
+    *
+    * @param mixed $value The language value
+    * @return $this
+    */
+    public function setLanguage($value)
+    {
+        return $this->setParameter('language', $value);
+    }
+
+    /**
+    * Get the language.
+    *
+    * @return mixed
+    */
+    public function getLanguage()
+    {
+        return $this->getParameter('language');
+    }
+
+
+    /**
+     * Get the postResultUrl.
+     *
+     * @return mixed
+     */
+    public function getPostResultUrl()
+    {
+        return $this->getParameter('postResultUrl');
+    }
+
+    /**
+     * Set the postResultUrl.
+     *
+     * @param mixed $value The postResultUrl value
+     * @return $this
+     */
+    public function setPostResultUrl($value)
+    {
+        return $this->setParameter('postResultUrl', $value);
+    }
+
+    /**
+     * Get the returnUrl.
+     *
+     * @return mixed
+     */
+    public function getReturnUrl()
+    {
+        return $this->getParameter('returnUrl');
+    }
+
+    /**
+     * Set the returnUrl.
+     *
+     * @param mixed $value The returnUrl value
+     * @return $this
+     */
+    public function setReturnUrl($value)
+    {
+        return $this->setParameter('returnUrl', $value);
+    }
+
+
+
 
     /**
      * Get the 3D value.
@@ -153,27 +437,6 @@ trait CommonParameters
     }
 
     /**
-     * Get the secure code.
-     *
-     * @return mixed
-     */
-    public function getSecureCode()
-    {
-        return $this->getParameter('secureCode');
-    }
-
-    /**
-     * Set the secure code for the transaction.
-     *
-     * @param mixed $value The secure code value
-     * @return $this
-     */
-    public function setSecureCode($value)
-    {
-        return $this->setParameter('secureCode', $value);
-    }
-
-    /**
      * Get the End User License Agreement (EULA) ID.
      *
      * @return mixed
@@ -205,30 +468,6 @@ trait CommonParameters
     }
 
     /**
-     * Set the msisdn.
-     * 
-     * Müşterinin uygulamaya login olduğu telefon numarası. 
-     * Ülke kodu + Telefon No formatında iletilir.
-     *
-     * @param mixed $value The msisdn value
-     * @return $this
-     */
-    public function setMsisdn($value)
-    {
-        return $this->setParameter('msisdn', $value);
-    }
-
-    /**
-     * Get the msisdn.
-     *
-     * @return mixed
-     */
-    public function getMsisdn()
-    {
-        return $this->getParameter('msisdn');
-    }
-
-    /**
      * Set the referance number.
      * 
      * Üye işyeri uygulaması tarafından üretilecek unique numerik işlem referans numarası değeridir. 
@@ -252,7 +491,7 @@ trait CommonParameters
      */
     public function getReferenceNumber()
     {
-        return $this->getParameter('referenceNumber') ? $this->getPrefix() . $this->getParameter('referenceNumber') : " ";
+        return $this->getParameter('referenceNumber');
     }
 
     /**
@@ -339,54 +578,7 @@ trait CommonParameters
     public function getClientIPAddress() {
         return $_SERVER['REMOTE_ADDR'] ?? "127.0.0.1";
     }
-
-    /**
-     * Set the cardId.
-     * 
-     * Unique identifier for the card.
-     *
-     * @param mixed $value The cardId value
-     * @return $this
-     */
-    public function setCardId($value)
-    {
-        return $this->setParameter('cardId', $value);
-    }
-
-    /**
-     * Get the cardId.
-     *
-     * @return mixed
-     */
-    public function getCardId()
-    {
-        return $this->getParameter('cardId');
-    }
-
-    /**
-     * Set the pin.
-     * 
-     * Personal Identification Number associated with the card.
-     *
-     * @param mixed $value The pin value
-     * @return $this
-     */
-    public function setPin($value)
-    {
-        return $this->setParameter('pin', $value);
-    }
-
-    /**
-     * Get the pin.
-     *
-     * @return mixed
-     */
-    public function getPin()
-    {
-        return $this->getParameter('pin');
-    }
-
-
+ 
 
     /**
      * Set the pointAmount.
@@ -457,4 +649,5 @@ trait CommonParameters
     {
         return $this->getParameter('acquirerBankCode');
     }
+
 }

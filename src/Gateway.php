@@ -15,7 +15,7 @@ use Omnipay\Paycell\Message\Purchase3DCompleteRequest;
  * 
  * (c) Yasin Kuyu
  * 2024, insya.com
- * http://www.github.com/yasinkuyu/omnipay-paycell
+ * http://www.github.com/yasinkuyu/omnipay-paycell-sdk
  */
 class Gateway extends AbstractGateway
 {
@@ -70,24 +70,4 @@ class Gateway extends AbstractGateway
         return $this->createRequest(ReverseRequest::class, $parameters);
     }
 
-    /**
-     * Initiate a purchase 3d request.
-     *
-     * @return \Omnipay\Common\Message\AbstractRequest
-     */
-    public function purchase3d(array $parameters = [])
-    {
-        return $this->createRequest(Purchase3DRequest::class, $parameters);
-    }
-
-
-    /**
-     * Initiate a purchase 3d request.
-     *
-     * @return \Omnipay\Common\Message\AbstractRequest
-     */
-    public function completePurchase(array $parameters = [])
-    {
-        return $this->createRequest(Purchase3DCompleteRequest::class, $parameters);
-    }
 }

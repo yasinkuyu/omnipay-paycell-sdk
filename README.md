@@ -1,11 +1,11 @@
-# Omnipay: Paycell
+# Omnipay: Paycell SDK
 
-### Turkcell Paycell gateway for Omnipay payment processing library
+### Turkcell Paycell SDK gateway for Omnipay payment processing library
 
-[![Latest Stable Version](https://poser.pugx.org/yasinkuyu/omnipay-paycell/v/stable)](https://packagist.org/packages/yasinkuyu/omnipay-paycell)
-[![Total Downloads](https://poser.pugx.org/yasinkuyu/omnipay-paycell/downloads)](https://packagist.org/packages/yasinkuyu/omnipay-paycell)
-[![Latest Unstable Version](https://poser.pugx.org/yasinkuyu/omnipay-paycell/v/unstable)](https://packagist.org/packages/yasinkuyu/omnipay-paycell)
-[![License](https://poser.pugx.org/yasinkuyu/omnipay-paycell/license)](https://packagist.org/packages/yasinkuyu/omnipay-paycell)
+[![Latest Stable Version](https://poser.pugx.org/yasinkuyu/omnipay-paycell-sdk/v/stable)](https://packagist.org/packages/yasinkuyu/omnipay-paycell-sdk)
+[![Total Downloads](https://poser.pugx.org/yasinkuyu/omnipay-paycell-sdk/downloads)](https://packagist.org/packages/yasinkuyu/omnipay-paycell-sdk)
+[![Latest Unstable Version](https://poser.pugx.org/yasinkuyu/omnipay-paycell-sdk/v/unstable)](https://packagist.org/packages/yasinkuyu/omnipay-paycell-sdk)
+[![License](https://poser.pugx.org/yasinkuyu/omnipay-paycell-sdk/license)](https://packagist.org/packages/yasinkuyu/omnipay-paycell-sdk)
 
 [Omnipay](https://github.com/thephpleague/omnipay) is a framework agnostic, multi-gateway payment
 processing library for PHP 8.1.x. This package implements Turkcell Paycell support for Omnipay.
@@ -14,7 +14,7 @@ processing library for PHP 8.1.x. This package implements Turkcell Paycell suppo
 
 ## Installation
 
-    composer require league/omnipay yasinkuyu/omnipay-paycell
+    composer require league/omnipay yasinkuyu/omnipay-paycell-sdk
 
 
     ```
@@ -29,7 +29,7 @@ processing library for PHP 8.1.x. This package implements Turkcell Paycell suppo
     ```json
     {
       "require": {
-        "yasinkuyu/omnipay-paycell": "^3.0"
+        "yasinkuyu/omnipay-paycell-sdk": "^3.0"
       }
     }
     ```
@@ -43,7 +43,7 @@ processing library for PHP 8.1.x. This package implements Turkcell Paycell suppo
 
     The following gateways are provided by this package:
 
-    cd /YOUR-PATH/vendor/yasinkuyu/omnipay-paycell/example
+    cd /YOUR-PATH/vendor/yasinkuyu/omnipay-paycell-sdk/example
 
     Change init.php.example to init.php
 
@@ -75,7 +75,7 @@ processing library for PHP 8.1.x. This package implements Turkcell Paycell suppo
   - Entegrasyona başlamadan önce menüde bulunan API Entegrasyonu sekmesindeki Genel Özellikler ve kullanmak istediğiniz fonksiyonlar için Fonksiyon Listesi bölümlerini incelemeniz faydalı olacaktır.
   - Entegrasyon sırasında kritik noktalar için Servis Erişim ve Genel Bilgiler sekmesindeki Entegrasyona Ait Önemli Notlar ve Gerekli Tanımlamalar kısmını kontrol etmeniz gerekmektedir.
   - Entegrasyona başlarken öncelikle çalışacağınız servis yöntemini belirlemelisiniz. SOAP tabanlı çalışacaksanız menüde bulunan SOAP Tabanlı XML Servis Örnekleri sekmesine, RESTFUL tabanlı çalışacaksanız menüde bulunan RESTFUL Tabanlı JSON Servis Örnekleri sekmesine bakmanız gerekecektir.
-  - Eğer bir PAYCELL müşterisiyseniz size verilen test bilgileri ile ilerleyebilirsiniz ya da Servis Erişim ve Genel Bilgiler sekmesinden test için kullanabileceğiniz default bilgilere erişebilirsiniz.
+  - Eğer bir PAYCELL SDK müşterisiyseniz size verilen test bilgileri ile ilerleyebilirsiniz ya da Servis Erişim ve Genel Bilgiler sekmesinden test için kullanabileceğiniz default bilgilere erişebilirsiniz.
   - İşlem ya da kart ekleme adımlarında 3D yöntemini kullanacaksanız, API Entegrasyonu menüsünde bulunan 3D Yönlendirme Sayfası başlığını incelemelisiniz.
   - Hazır olarak sunulan JAVA, .NET, NODE JS, PYTHON dillerinde yazılmış projeleri Örnek Kodlar sayfasında bulabilirsiniz.
   - Tüm süreç boyunca paycelldev@paycell.com.tr adresinden ya da iletişimde olduğunuz Paycell temsilcisinden destek alabilirsiniz.
@@ -161,5 +161,5 @@ If you are having general issues with Omnipay, we suggest posting on
 If you want to keep up to date with release anouncements, discuss ideas for the project, or ask more detailed questions, there is also a [mailing list](https://groups.google.com/forum/#!forum/omnipay) which
 you can subscribe to.
 
-If you believe you have found a bug, please report it using the [GitHub issue tracker](https://github.com/yasinkuyu/omnipay-paycell/issues),
+If you believe you have found a bug, please report it using the [GitHub issue tracker](https://github.com/yasinkuyu/omnipay-paycell-sdk/issues),
 or better yet, fork the library and submit a pull request.

@@ -6,104 +6,63 @@ namespace Omnipay\Paycell\Helpers;
  * 
  * (c) Yasin Kuyu
  * 2024, insya.com
- * http://www.github.com/yasinkuyu/omnipay-paycell
+ * http://www.github.com/yasinkuyu/omnipay-paycell-sdk
  */
 class HashService {
-
-    public $applicationName;
-    public $applicationPwd;
-    public $secureCode;
+    private array $parameters;
     
-    /**
-     * Generates hash data for the request.
-     * 
-     * PAYCELL tarafından iletilecek applicationPwd ve secureCode ile input parametreleri hash’lenir.
-     * Hash data oluşturulmasında kullanılacak olan güvenlik parametreleri (applicationName, applicationPwd, secureCode)
-     *  server tarafında tutulmalıdır,
-     * hash oluşturma işlemi server tarafında yapılmalıdır, ancak oluşan değerler uygulama/client tarafında iletilerek 
-     * getCardTokenSecure servisi uygulama/client tarafından çağrılmalıdır.
-     * hashData 2 aşamada oluşturulacaktır.
-     * Her iki aşamada da ilgili parametreler büyük harfe dönüştürülerek data oluşturulmalıdır.
-     * İlk aşamada securityData hashlenerek oluşturulur. securityData oluşturulurken applicationName ve applicationPwd değeri büyük harfe çevrilir. 
-     * Oluşan securityData değeri ikinci aşamadaki hashData üretiminde kullanılmak üzere büyük harfe dönüştürülür.
-     * İkinci aşamada, oluşturulan securityData ile diğer değerler büyük harfe çevrilerek birleştirilip elde edilen
-     *  değer hashlenerek hashData oluşturulur.
-     * securityData: applicationPwd+ applicationName
-     * hashData: applicationName+ transactionId+ transactionDateTime+ secureCode + securityData
-     * Java hash örneği aşağıdaki gibidir.
-     * java.security.MessageDigest sha2 = java.security.MessageDigest.getInstance(“SHA-256”);
-     * hash = Base64.encodeBase64String(sha2.digest(paramsVal.getBytes()));
-     *
-     * @param string $transactionId The transaction ID.
-     * @param string $transactionDateTime The transaction date and time.
-     * @return string The generated hash data.
-     */
-    public function requestHash($transactionId, $transactionDateTime): string {
-        return $this->generateHash($transactionId, $transactionDateTime);
-    }
-
-    /**
-     * Generates hash data for the response.
-     * 
-     * responseBody’de dönülen hashData ile üye işyerinin oluşturacağı hashData eşit olmalıdır. Bu kontrol üye işyeri tarafından yapılır.
-     * Üye işyerinin oluşturacağı hashData 2 aşamada oluşturulacaktır. İlk aşamada securityData hashlenerek oluşturulur. 
-     * İkinci aşamada oluşturulan securityData ile diğer değerler birleştirilerek elde edilen değer hashlenerek hashData oluşturulur.
-     * securityData: applicationPwd+ applicationName
-     *   
-     * hashData: applicationName+ transactionId+ responseDateTime + responseCode + cardToken + secureCode + securityData
-     * Java hash örneği aşağıdaki gibidir.
-     * java.security.MessageDigest sha2 = java.security.MessageDigest.getInstance(“SHA-256”);
-     * hash = Base64.encodeBase64String(sha2.digest(paramsVal.getBytes()));
-     *
-     * @param string $transactionId The transaction ID.
-     * @param string $responseDateTime The response date and time.
-     * @param string $responseCode The response code.
-     * @param string $cardToken The card token.
-     * @return string The generated hash data.
-     */
-    public function responseHash($transactionId, $responseDateTime, $responseCode, $cardToken): string {
-        return $this->generateHash($transactionId, $responseDateTime, $responseCode, $cardToken);
-    }
-
-    /**
-     * Generates hash data based on given parameters.
-     *
-     * @param string $transactionId The transaction ID.
-     * @param string $dateTime The date and time.
-     * @param string|null $responseCode The response code.
-     * @param string|null $cardToken The card token.
-     * @return string The generated hash data.
-     */
-    private function generateHash($transactionId, $dateTime, $responseCode = null, $cardToken = null): string {
+    public function __construct(array $parameters) {
+        $this->parameters = $parameters;
         
-        // Get necessary parameters from the gateway
-        $applicationName = $this->applicationName;
-        $applicationPwd =  $this->applicationPwd;
-        $secureCode = $this->secureCode;
-
-        // Generate security data and hash it
-        $securityData = $this->hash($applicationPwd.$applicationName);
-        $hashData = $this->hash(
-            $applicationName.
-            $transactionId.
-            $dateTime.
-            ($responseCode ?? '') .
-            ($cardToken ?? '') .
-            $secureCode .
-            $securityData
-        );
-
-        return $hashData;
+        // Validate required parameters
+        $requiredParams = ['secureCode', 'terminalCode', 'paymentReferenceNumber', 
+                          'amount', 'paymentSecurity', 'hostAccount', 'currency'];
+                          
+        foreach($requiredParams as $param) {
+            if(!isset($parameters[$param])) {
+                throw new \InvalidArgumentException("Missing required parameter: $param");
+            }
+        }
     }
 
-    /**
-     * Hashes the given parameter.
-     *
-     * @param string $param The parameter to hash.
-     * @return string The hashed data.
-     */
-    private function hash($param): string {
-        $upper = strtoupper($param);
-        return base64_encode(hash('sha256', $upper, true));
+    public function generateRequestHash(string $transactionId, string $transactionDateTime): string {
+        // Generate initial security data hash
+        $securityData = $this->hash($this->parameters['secureCode'] . $this->parameters['terminalCode']);
+        
+        // Build data string with required parameters
+        $data = implode('', [
+            $this->parameters['paymentReferenceNumber'],
+            $this->parameters['terminalCode'], 
+            $this->parameters['amount'],
+            $this->parameters['currency'],
+            $this->parameters['paymentSecurity'],
+            $this->parameters['hostAccount']
+        ]);
+
+        // Add installment plan data if present
+        if(!empty($this->parameters['installmentPlan'])) {
+            $data .= $this->processInstallmentPlan($this->parameters['installmentPlan']);
+        }
+
+        // Append security data and generate final hash
+        return $this->hash($data . $securityData);
+    }
+
+    private function processInstallmentPlan(array $installmentPlan): string {
+        usort($installmentPlan, fn($a, $b) => $a['lineId'] - $b['lineId']);
+        
+        return array_reduce($installmentPlan, function($carry, $item) {
+            return $carry . implode('', [
+                $item['lineId'],
+                $item['paymentMethodType'],
+                $item['cardBrand'],
+                $item['count'],
+                $item['amount']
+            ]);
+        }, '');
+    }
+
+    private function hash(string $data): string {
+        return base64_encode(hash('sha256', $data, true));
     }
 }

@@ -9,7 +9,7 @@ use Omnipay\Common\Message\AbstractResponse;
  * 
  * (c) Yasin Kuyu
  * 2024, insya.com
- * http://www.github.com/yasinkuyu/omnipay-paycell
+ * http://www.github.com/yasinkuyu/omnipay-paycell-sdk
  */
 class TransactionResponse extends AbstractResponse
 {
@@ -21,7 +21,7 @@ class TransactionResponse extends AbstractResponse
      */
     public function isSuccessful()
     {
-        return $this->data->responseHeader->responseDescription ?? false === "Success";
+        return $this->data->message ?? false === "Success";
     }
   
     /**
@@ -31,7 +31,7 @@ class TransactionResponse extends AbstractResponse
      */
     public function getMessage()
     {
-        return $this->data->responseHeader->responseDescription ?? null;
+        return $this->data->message ?? null;
     }
 
     public function getData()
@@ -46,7 +46,17 @@ class TransactionResponse extends AbstractResponse
      */
     public function getTransactionId()
     {
-        return $this->data->responseHeader->transactionId ?? null;
+        return $this->data->transactionId ?? null;
+    }
+
+    public function getTrackingId()
+    {
+        return $this->data->trackingId ?? null;
+    }
+
+    public function getTrackingUrl()
+    {
+        return $this->data->trackingUrl ?? null;
     }
 
     // Omnipay transaction
@@ -114,15 +124,6 @@ class TransactionResponse extends AbstractResponse
         return $this->data->reconciliationDate ?? null;
     }
 
-    /**
-     * Get the Iyzico payment ID.
-     *
-     * @return string|null
-     */
-    public function getIyzPaymentId()
-    {
-        return $this->data->iyzPaymentId ?? null;
-    }
     
     /**
      * Get the Three D Session Id.

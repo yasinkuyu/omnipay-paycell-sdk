@@ -28,7 +28,7 @@ $gateway->setSecureCode('PAYCELL12345');
 $gateway->setEulaID(17);
 $gateway->setMerchantCode(9998);
 
-$gateway->setMsisdn('XXXXXXXXX');
+$gateway->setTerminalCode('XXXXXXXXX');
 
 $gateway->setTestMode(true);
 

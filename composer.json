@@ -1,5 +1,5 @@
 {
-    "name": "yasinkuyu/omnipay-paycell",
+    "name": "yasinkuyu/omnipay-paycell-sdk",
     "type": "library",
     "description": "Turkcell Paycell gateway for Omnipay payment processing library",
     "keywords": [
@@ -11,7 +11,7 @@
         "pay",
         "payment"
     ],
-    "homepage": "https://github.com/yasinkuyu/omnipay-paycell",
+    "homepage": "https://github.com/yasinkuyu/omnipay-paycell-sdk",
     "license": "MIT",
     "authors": [
         {
@@ -20,7 +20,7 @@
         },
         {
             "name": "Omnipay Contributors",
-            "homepage": "https://github.com/yasinkuyu/omnipay-paycell/contributors"
+            "homepage": "https://github.com/yasinkuyu/omnipay-paycell-sdk/contributors"
         }
     ],
     "autoload": {
@@ -32,5 +32,4 @@
         "omnipay/common": "^3.0"
     },
     "prefer-stable": true
-
 }

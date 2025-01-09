@@ -17,40 +17,9 @@ use Omnipay\Paycell\CommonParameters;
 
  * (c) Yasin Kuyu
  * 2024, insya.com
- * http://www.github.com/yasinkuyu/omnipay-paycell
+ * http://www.github.com/yasinkuyu/omnipay-paycell-sdk
  */
 
-/* 
-    Example 
-    Request:
-    {
-        "amount": "1000",
-        "merchantCode": "2003",
-        "msisdn": "905599999969",
-        "originalReferenceNumber": "12319332200000000000",
-        "referenceNumber": "1263000000000000933",
-        "requestHeader": {
-            "applicationName": "XXXX",
-            "applicationPwd": "XXXX",
-            "clientIPAddress": "91.93.156.6",
-            "transactionDateTime": "20181002182828017",
-            "transactionId": "00000000000002187144"
-        } 
-    } 
-    Response:
-    {
-        "responseHeader":    {
-            "transactionId": "00000000000002187144",
-            "responseDateTime": "20181017143240726",
-            "responseCode": "0",
-            "responseDescription": "Success"
-        },
-        "reconciliationDate": "20181017",
-        "approvalCode": "820013",
-        "retryStatusCode": null,
-        "retryStatusDescription": null
-    }
- */
 class RefundRequest extends AbstractRequest
 {
 
