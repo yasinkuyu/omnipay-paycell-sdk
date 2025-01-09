@@ -2,11 +2,6 @@
 
 **Turkcell Paycell SDK gateway for Omnipay payment processing library**
 
-[![Latest Stable Version](https://poser.pugx.org/yasinkuyu/omnipay-paycell-sdk/v/stable)](https://packagist.org/packages/yasinkuyu/omnipay-paycell-sdk)
-[![Total Downloads](https://poser.pugx.org/yasinkuyu/omnipay-paycell-sdk/downloads)](https://packagist.org/packages/yasinkuyu/omnipay-paycell-sdk)
-[![Latest Unstable Version](https://poser.pugx.org/yasinkuyu/omnipay-paycell-sdk/v/unstable)](https://packagist.org/packages/yasinkuyu/omnipay-paycell-sdk)
-[![License](https://poser.pugx.org/yasinkuyu/omnipay-paycell-sdk/license)](https://packagist.org/packages/yasinkuyu/omnipay-paycell-sdk)
-
 [Omnipay](https://github.com/thephpleague/omnipay) is a framework agnostic, multi-gateway payment processing library for PHP 8.1.x. This package implements Turkcell Paycell support for Omnipay.
 
 ## Important Notes
