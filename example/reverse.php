@@ -2,7 +2,7 @@
 
 require 'init.php';
 
-$gateway->setReferenceNumber(date("Ymdhis"));
+$gateway->setReferenceNumber(date('YmdHis') . substr(microtime(), 2, 3));
 
 // The transaction number to be used for return, reverse(void), and inquire(fetch) methods
 $gateway->setOriginalReferenceNumber("00120250109210408000");

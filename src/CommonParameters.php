@@ -8,8 +8,9 @@ trait CommonParameters
     public function getDefaultParameters()
     {
 
-        $transactionDateTime = substr(date("YmdHisu"), 0, 17);
- 
+        ## $transactionDateTime = substr(date("YmdHisu"), 0, 17);
+        $transactionDateTime = date('YmdHis') . substr(microtime(), 2, 3);
+
         return [
 
             // default parameters
@@ -579,7 +580,7 @@ trait CommonParameters
      * @return string|null The transaction date and time.
      */
     public function getTransactionDateTime() {
-        return $this->getParameter('transactionDateTime') ? $this->getPrefix() . $this->getParameter('transactionDateTime') : " ";
+        return $this->getParameter('transactionDateTime');
     }
 
     /**

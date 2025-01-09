@@ -4,7 +4,10 @@ require 'init.php';
 
 // Error: There was an invalid parameter 
 // Min length 20
-$gateway->setReferenceNumber(date("Ymdhissss")); // unique transaction reference number, order number etc... 
+
+$transactionDateTime = date('YmdHis') . substr(microtime(), 2, 3);
+
+$gateway->setReferenceNumber($transactionDateTime); // unique transaction reference number, order number etc... 
 $gateway->setHostAccount("xxxxxx@xxxx.com");
 $gateway->setPaymentSecurity("NON_THREED_SECURE"); // THREED_SECURE
 $gateway->setLanguage("tr");
