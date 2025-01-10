@@ -8,8 +8,7 @@ trait CommonParameters
     public function getDefaultParameters()
     {
 
-        ## $transactionDateTime = substr(date("YmdHisu"), 0, 17);
-        $transactionDateTime = date('YmdHis') . substr(microtime(), 2, 3);
+        $transactionDateTime = substr(date("YmdHisu"), 0, 17);
 
         return [
 

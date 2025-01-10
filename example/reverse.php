@@ -2,11 +2,8 @@
 
 require 'init.php';
 
-$gateway->setReferenceNumber(date('YmdHis') . substr(microtime(), 2, 3));
-
-// The transaction number to be used for return, reverse(void), and inquire(fetch) methods
-$gateway->setOriginalReferenceNumber("00120250109210408000");
-$gateway->setMsisdn("905322108110");
+$gateway->setOriginalReferenceNumber("00120250110073942398");
+$gateway->setMsisdn("905355106190");
 
 $response = $gateway->reverse()->send();
 

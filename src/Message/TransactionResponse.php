@@ -23,6 +23,21 @@ class TransactionResponse extends AbstractResponse
     {
         return $this->data->message ?? false === "Success";
     }
+
+    public function getStatus()
+    {
+        // The result from Status is an enum type. Values are: 0 for SUCCESS, 1 for PENDING, 2 for CANCELLED, and 3 for NOTFOUND.
+    
+        if ($this->data->statusCode == 0) {
+            return "SUCCESS";
+        } else if ($this->data->statusCode == 1) {
+            return "PENDING";
+        } else if ($this->data->statusCode == 2) {
+            return "CANCELLED";
+        } else if ($this->data->statusCode == 3) {
+            return "NOTFOUND";
+        }
+    }
   
     /**
      * Get the response description.

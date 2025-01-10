@@ -50,8 +50,6 @@ abstract class PaycellService extends AbstractRequest
     private const TEST_INIT_HOME_URL = 'https://websdktest.turkcell.com.tr/home/[trackingId]';
     private const TEST_QUERY_URL = 'https://zone-test.turkcell.com.tr/tpay/zone/services/cancelrestful/cancelService/';
 
-    #private const TEST_QUERY_URL = 'https://tpay-test.turkcell.com.tr/tpay/provision/services/cancelrestful/cancelService/';
-
 	public static $queryStatu = "queryPaymentStatus/";
 	public static $reverse = "reversePayment/";
 	public static $refund = "refundPayment/";
@@ -152,11 +150,9 @@ abstract class PaycellService extends AbstractRequest
         $data = array_merge($data, $this->requestData);
 
         $curl = curl_init();
-
-        echo $url;
-        echo PHP_EOL;
-        print_r($data);
-
+echo $url;
+echo PHP_EOL;
+print_r($data);
         curl_setopt_array($curl, [
             CURLOPT_URL => $url,
             CURLOPT_RETURNTRANSFER => true,

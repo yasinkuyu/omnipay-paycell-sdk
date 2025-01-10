@@ -5,9 +5,7 @@ require 'init.php';
 // Error: There was an invalid parameter 
 // Min length 20
 
-$paymentReferenceNumber = date('YmdHis') . substr(microtime(), 2, 3);
-
-$gateway->setReferenceNumber($paymentReferenceNumber); // unique transaction reference number, order number etc... 
+$gateway->setReferenceNumber(date("Ymdhissss")); 
 $gateway->setHostAccount("xxxxxx@xxxx.com");
 $gateway->setPaymentSecurity("NON_THREED_SECURE"); // THREED_SECURE
 $gateway->setLanguage("tr");
@@ -44,6 +42,7 @@ if ($response->isSuccessful()) {
  
     echo "trackingId: " . $response->getTrackingId() . PHP_EOL;
     echo "trackingUrl: " . $response->getTrackingUrl() . PHP_EOL;
+    echo "status: " . $response->getStatus() . PHP_EOL;
 
     if ($response->getTrackingUrl()) {
         echo '<script type="text/javascript">';
@@ -55,12 +54,15 @@ if ($response->isSuccessful()) {
     } else {
         echo "Tracking URL not available" . PHP_EOL;
     }
-    // The transaction number to be used for return, reverse(void), and inquire(fetch) methods
-    echo "ReferenceNumber: " . $gateway->getReferenceNumber() . PHP_EOL;
 
+    // The transaction number to be used for return, reverse(void), and inquire(fetch) methods
+    echo "referenceNumber: " . $gateway->getReferenceNumber() . PHP_EOL;
     echo "getMessage: " . $response->getMessage() . PHP_EOL;
     
    
 } else {
     echo "Purchase fail: " . $response->getMessage() . PHP_EOL;
 }
+
+echo "\nQuery Response Raw Data:\n";
+print_r($response->getData());

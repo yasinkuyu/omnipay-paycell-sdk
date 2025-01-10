@@ -24,7 +24,6 @@ class PurchaseRequest extends AbstractRequest
     public function sendData($data)
     {
         $httpResponse = $this->provision($data);
-
         return $this->createResponse($httpResponse);
     }
 
