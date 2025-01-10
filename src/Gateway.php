@@ -24,7 +24,7 @@ class Gateway extends AbstractGateway
 
     public function getName()
     {
-        return 'Paycell';
+        return 'PaycellSDK';
     }
 
     /**

@@ -5,7 +5,7 @@ namespace Omnipay\PaycellSDK\Message;
 use Omnipay\PaycellSDK\CommonParameters;
 
 /**
- * Paycell Provision
+ * Paycell SDK Purchase Request
  * 
  * (c) Yasin Kuyu
  * 2024, insya.com

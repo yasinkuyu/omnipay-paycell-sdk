@@ -5,7 +5,7 @@ namespace Omnipay\PaycellSDK\Message;
 use Omnipay\Common\Message\AbstractResponse;
 
 /**
- * Paycell SDK
+ * Paycell SDK Transaction Response
  * 
  * (c) Yasin Kuyu
  * 2024, insya.com

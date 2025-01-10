@@ -2,7 +2,7 @@
 
 **Turkcell Paycell SDK gateway for Omnipay payment processing library**
 
-[Omnipay](https://github.com/thephpleague/omnipay) is a framework agnostic, multi-gateway payment processing library for PHP 8.1.x. This package implements Turkcell Paycell support for Omnipay.
+[Omnipay](https://github.com/thephpleague/omnipay) is a framework agnostic, multi-gateway payment processing library for PHP 8.1.x. This package implements Turkcell Paycell SDK support for Omnipay.
 
 ## Important Notes
 
@@ -69,7 +69,7 @@ php -S localhost:8000
 ```php
 use Omnipay\Omnipay;
 
-$gateway = Omnipay::create('Paycell');
+$gateway = Omnipay::create('PaycellSDK');
 $gateway->setTestMode(true); // Enable test mode
 $gateway->setApplicationName('PAYCELLTEST');
 $gateway->setApplicationPwd('PaycellTestPassword');

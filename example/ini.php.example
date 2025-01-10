@@ -20,7 +20,7 @@ require '../../../../vendor/autoload.php';
 
 use Omnipay\Omnipay;
 
-$gateway = Omnipay::create('Paycell');
+$gateway = Omnipay::create('PaycellSDK');
 $gateway->setPrefix(666);
 $gateway->setApplicationName('PAYCELLTEST');
 $gateway->setApplicationPwd('PaycellTestPassword');

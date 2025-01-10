@@ -2,7 +2,7 @@
 namespace Omnipay\PaycellSDK\Helpers;
 
 /**
- * Paycell
+ * Paycell SDK Hash Service
  * 
  * (c) Yasin Kuyu
  * 2024, insya.com

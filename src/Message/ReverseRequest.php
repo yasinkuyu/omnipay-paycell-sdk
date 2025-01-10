@@ -5,7 +5,7 @@ namespace Omnipay\PaycellSDK\Message;
 use Omnipay\PaycellSDK\CommonParameters;
 
 /**
- * Paycell SDK Reverse
+ * Paycell SDK Reverse Request
  * 
  * Yapılan ödeme işleminin iptal edilmesi amacıyla kullanılır. İptal işlemi iki şekilde çağırabilir. 
  * Provision servisine cevap alınamayarak timeout alınması durumunda, işlem mutabakatının sağlanması 

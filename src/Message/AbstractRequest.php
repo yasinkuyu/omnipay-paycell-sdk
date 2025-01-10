@@ -3,7 +3,7 @@
 namespace Omnipay\PaycellSDK\Message;
 
 /**
- * Paycell
+ * Paycell SDK Abstract Request
  * 
  * (c) Yasin Kuyu
  * 2024, insya.com
