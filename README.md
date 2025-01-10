@@ -4,13 +4,6 @@
 
 [Omnipay](https://github.com/thephpleague/omnipay) is a framework agnostic, multi-gateway payment processing library for PHP 8.1.x. This package implements Turkcell Paycell support for Omnipay.
 
-## Important Notes
-
-- Please review [Paycell SDK Documentation](https://paycell.com.tr/paycell-sdk) before starting integration
-- Check "Service Access and General Information" section for critical integration points
-- This package uses RESTful JSON service examples
-- For integration support: paycelldev@paycell.com.tr
-
 ## Installation
 
 ```bash
@@ -30,32 +23,83 @@ composer require php-http/curl-client guzzlehttp/psr7 php-http/message
 - Secure code: PAYCELL12345
 - Eulaid: 17
 - Merchant Code: 9998
-
-## Supported Methods
-
-- Purchase
-- Purchase with 3D Secure
-- Inquiry (Transaction Status)
-- Refund
-- Reverse (Cancel)
+- Terminal Code: [Get from Paycell]
 
 ## Basic Usage
 
-1. Navigate to example directory:
+### Initialize Gateway
 
-```bash
-cd /YOUR-PATH/vendor/yasinkuyu/omnipay-paycell-sdk/example
+```php
+use Omnipay\Omnipay;
+
+$gateway = Omnipay::create('Paycell');
+$gateway->setTestMode(true);
+$gateway->setApplicationName('PAYCELLTEST');
+$gateway->setApplicationPwd('PaycellTestPassword');
+$gateway->setSecureCode('PAYCELL12345');
+$gateway->setEulaID(17);
+$gateway->setMerchantCode(9998);
+$gateway->setTerminalCode('XXXXXXXXX');
 ```
 
-2. Copy `init.php.example` to `init.php`
+### Process Purchase
 
-3. Start test server:
+```php
+$transactionDateTime = date('YmdHis') . substr(microtime(), 2, 3);
 
-```bash
-php -S localhost:8000
+$gateway->setReferenceNumber($transactionDateTime);
+$gateway->setHostAccount("customer@email.com");
+$gateway->setPaymentSecurity("NON_THREED_SECURE"); // or "THREED_SECURE"
+$gateway->setLanguage("tr");
+
+$response = $gateway->purchase([
+    'amount' => '10.00',
+    'currency' => 'TRY',
+])->send();
+
+if ($response->isSuccessful()) {
+    echo "Payment successful!";
+    // Get tracking URL for redirect
+    $trackingUrl = $response->getTrackingUrl();
+}
 ```
 
-4. Open test page in browser: `http://localhost:8000/purchase.php`
+### Query Transaction Status
+
+```php
+$response = $gateway->query([
+    'originalPaymentReferenceNumber' => $paymentReferenceNumber,
+])->send();
+
+if ($response->isSuccessful()) {
+    echo "Transaction status: " . $response->getMessage();
+}
+```
+
+### Process Refund
+
+```php
+$response = $gateway->refund([
+    'amount' => '10.00',
+    'currency' => 'TRY',
+    'originalPaymentReferenceNumber' => $paymentReferenceNumber,
+])->send();
+```
+
+### Process Reverse (Cancel)
+
+```php
+$response = $gateway->reverse([
+    'originalPaymentReferenceNumber' => $paymentReferenceNumber,
+])->send();
+```
+
+## Supported Methods
+
+- Purchase (Regular and 3D Secure)
+- Query Transaction Status
+- Refund
+- Reverse (Cancel)
 
 ## Test Cards
 
@@ -65,10 +109,11 @@ For test credit cards, visit: https://paycell.com.tr/test-kredi-kartlari
 
 - PHP >= 8.1.0
 - Composer
+- PHP cURL extension
 
 ## Support
 
-- For general questions, use [Stack Overflow](http://stackoverflow.com/) with the [omnipay](http://stackoverflow.com/questions/tagged/omnipay) tag
+- For general questions, use [Stack Overflow](http://stackoverflow.com/questions/tagged/omnipay) with the `omnipay` tag
 - Report bugs via [GitHub Issues](https://github.com/yasinkuyu/omnipay-paycell-sdk/issues)
 - Technical support: paycelldev@paycell.com.tr
 
@@ -76,6 +121,6 @@ For test credit cards, visit: https://paycell.com.tr/test-kredi-kartlari
 
 For detailed integration information and API documentation, please visit [Paycell SDK Documentation](https://paycell.com.tr/paycell-sdk).
 
-## Paycell API
+## License
 
-- [Paycell API](https://github.com/yasinkuyu/omnipay-paycell)
+The MIT License (MIT). Please see [License File](LICENSE) for more information.
