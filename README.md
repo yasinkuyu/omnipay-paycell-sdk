@@ -16,6 +16,20 @@ Required additional dependencies:
 composer require php-http/curl-client guzzlehttp/psr7 php-http/message
 ```
 
+## Test Mode
+
+To enable test mode, set the following in your initialization:
+
+```php
+$gateway->setTestMode(true); // For test environment
+$gateway->setTestMode(false); // For production environment
+```
+
+Test mode uses different endpoints and credentials:
+
+- Test URL: https://websdktest.turkcell.com.tr
+- Production URL: https://paycellsdk.paycell.com.tr
+
 ## Test Environment Credentials
 
 - Application name: PAYCELLTEST
@@ -33,7 +47,7 @@ composer require php-http/curl-client guzzlehttp/psr7 php-http/message
 use Omnipay\Omnipay;
 
 $gateway = Omnipay::create('Paycell');
-$gateway->setTestMode(true);
+$gateway->setTestMode(true); // Enable test mode
 $gateway->setApplicationName('PAYCELLTEST');
 $gateway->setApplicationPwd('PaycellTestPassword');
 $gateway->setSecureCode('PAYCELL12345');
