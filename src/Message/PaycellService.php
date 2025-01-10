@@ -1,9 +1,9 @@
 <?php
 
-namespace Omnipay\Paycell\Message;
+namespace Omnipay\PaycellSDK\Message;
 
 use Omnipay\Common\Message\AbstractRequest;
-use Omnipay\Paycell\Helpers\HashService;
+use Omnipay\PaycellSDK\Helpers\HashService;
 
 /**
  *   Paycell Web SDK entegrasyonu için Paycell tarafından sağlanması gereken bilgiler;

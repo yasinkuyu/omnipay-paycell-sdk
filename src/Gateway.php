@@ -1,15 +1,15 @@
 <?php
 
-namespace Omnipay\Paycell;
+namespace Omnipay\PaycellSDK;
 
 use Omnipay\Common\AbstractGateway;
-use Omnipay\Paycell\Message\PurchaseRequest;
-use Omnipay\Paycell\Message\RefundRequest;
-use Omnipay\Paycell\Message\InquireRequest;
-use Omnipay\Paycell\Message\ReverseRequest;
-use Omnipay\Paycell\Message\Purchase3DRequest;
-use Omnipay\Paycell\Message\Purchase3DCompleteRequest;
-use Omnipay\Paycell\Message\QueryRequest;
+use Omnipay\PaycellSDK\Message\PurchaseRequest;
+use Omnipay\PaycellSDK\Message\RefundRequest;
+use Omnipay\PaycellSDK\Message\InquireRequest;
+use Omnipay\PaycellSDK\Message\ReverseRequest;
+use Omnipay\PaycellSDK\Message\Purchase3DRequest;
+use Omnipay\PaycellSDK\Message\Purchase3DCompleteRequest;
+use Omnipay\PaycellSDK\Message\QueryRequest;
 /**
  * Paycell Gateway
  * 

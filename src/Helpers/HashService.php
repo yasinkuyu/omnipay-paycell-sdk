@@ -1,5 +1,5 @@
 <?php
-namespace Omnipay\Paycell\Helpers;
+namespace Omnipay\PaycellSDK\Helpers;
 
 /**
  * Paycell

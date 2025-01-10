@@ -1,11 +1,11 @@
 <?php
 
-namespace Omnipay\Paycell\Message;
+namespace Omnipay\PaycellSDK\Message;
  
-use Omnipay\Paycell\CommonParameters;
+use Omnipay\PaycellSDK\CommonParameters;
 
 /**
- * Paycell Query Statu
+ * Paycell SDK Query Status
  * 
 
  * (c) Yasin Kuyu

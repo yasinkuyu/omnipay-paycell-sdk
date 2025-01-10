@@ -1,6 +1,6 @@
 <?php
 
-namespace Omnipay\Paycell\Message;
+namespace Omnipay\PaycellSDK\Message;
 
 /**
  * Paycell

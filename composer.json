@@ -1,9 +1,10 @@
 {
     "name": "yasinkuyu/omnipay-paycell-sdk",
     "type": "library",
-    "description": "Turkcell Paycell gateway for Omnipay payment processing library",
+    "description": "Turkcell Paycell SDK gateway for Omnipay payment processing library",
     "keywords": [
         "paycell",
+        "paycell sdk",
         "sanal pos",
         "gateway",
         "merchant",
@@ -25,7 +26,7 @@
     ],
     "autoload": {
         "psr-4": {
-            "Omnipay\\Paycell\\": "src/"
+            "Omnipay\\PaycellSDK\\": "src/"
         }
     },
     "require": {

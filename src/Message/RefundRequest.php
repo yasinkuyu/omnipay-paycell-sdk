@@ -1,11 +1,11 @@
 <?php
 
-namespace Omnipay\Paycell\Message;
+namespace Omnipay\PaycellSDK\Message;
  
-use Omnipay\Paycell\CommonParameters;
+use Omnipay\PaycellSDK\CommonParameters;
 
 /**
- * Paycell Refund
+ * Paycell DSK Refund
  * 
  * Yapılan ödeme işleminin iade edilmesi amacıyla kullanılır. İade, işlemin günsonu ardından 
  * ertesi günden itibaren iptal edilemesi veya belirli bir tutarın iade edilmesi amacıyla kullanılır. 

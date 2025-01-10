@@ -1,11 +1,11 @@
 <?php
 
-namespace Omnipay\Paycell\Message;
+namespace Omnipay\PaycellSDK\Message;
 
 use Omnipay\Common\Message\AbstractResponse;
 
 /**
- * Paycell
+ * Paycell SDK
  * 
  * (c) Yasin Kuyu
  * 2024, insya.com

@@ -1,6 +1,6 @@
 <?php
 
-namespace Omnipay\Paycell;
+namespace Omnipay\PaycellSDK;
 
 trait CommonParameters
 {

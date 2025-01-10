@@ -1,8 +1,8 @@
 <?php
 
-namespace Omnipay\Paycell\Message;
+namespace Omnipay\PaycellSDK\Message;
  
-use Omnipay\Paycell\CommonParameters;
+use Omnipay\PaycellSDK\CommonParameters;
 
 /**
  * Paycell Provision
