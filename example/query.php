@@ -10,11 +10,8 @@ $response = $gateway->query([
 
 if ($response->isSuccessful()) {
 
-    echo "3D Payment Successful" . PHP_EOL;
+    echo "Query Successful" . PHP_EOL;
 
-    echo PHP_EOL;
-
-    // The transaction number to be used for return, reverse(void), and inquire(fetch) methods
     echo "ReferenceNumber: " . $gateway->getReferenceNumber() . PHP_EOL;
 
     echo "getMessage: " . $response->getMessage() . PHP_EOL;
@@ -29,5 +26,8 @@ if ($response->isSuccessful()) {
 
 
 } else {
-    echo "3D Payment fail: " . $response->getMessage() . PHP_EOL;
+    echo "Query fail: " . $response->getMessage() . PHP_EOL;
 }
+
+echo "\nQuery Response Raw Data:\n";
+print_r($response->getData());

@@ -16,12 +16,9 @@ class PurchaseRequest extends AbstractRequest
 {
     use CommonParameters;
 
-    protected $actionType = 'SALE';
-
     public function getData()
     {
-        return [
-        ];
+        return [];
     }
 
     public function sendData($data)

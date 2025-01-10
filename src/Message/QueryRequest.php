@@ -26,8 +26,6 @@ class QueryRequest extends AbstractRequest
     public function sendData($data)
     {
         $httpResponse = $this->query($data);
-
-        print_r($httpResponse);
         return $this->createResponse($httpResponse);
     } 
 

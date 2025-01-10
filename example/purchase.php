@@ -5,15 +5,15 @@ require 'init.php';
 // Error: There was an invalid parameter 
 // Min length 20
 
-$transactionDateTime = date('YmdHis') . substr(microtime(), 2, 3);
+$paymentReferenceNumber = date('YmdHis') . substr(microtime(), 2, 3);
 
-$gateway->setReferenceNumber($transactionDateTime); // unique transaction reference number, order number etc... 
+$gateway->setReferenceNumber($paymentReferenceNumber); // unique transaction reference number, order number etc... 
 $gateway->setHostAccount("xxxxxx@xxxx.com");
 $gateway->setPaymentSecurity("NON_THREED_SECURE"); // THREED_SECURE
 $gateway->setLanguage("tr");
 
-$gateway->setReturnUrl("http://localhost:8002/query.php?paymentReferenceNumber=[paymentReferenceNumber]");
-$gateway->setPostResultUrl("http://localhost:8002/handleInitResult.php");
+$gateway->setReturnUrl("http://localhost:8000/query.php?paymentReferenceNumber=[paymentReferenceNumber]");
+$gateway->setPostResultUrl("http://localhost:8000/handleInitResult.php");
 
 $gateway->setInstallmentPlan(
     array(
@@ -22,7 +22,7 @@ $gateway->setInstallmentPlan(
         //     'paymentMethodType' => 'CREDIT_CARD',
         //     'cardBrand' => 'BONUS',
         //     'count' => 1,
-        //     'amount' => 10, // 10.00 TRY İlgili taksit adedi için satış tutarı. Eğer farklı ödeme araçları için farklı fiyat kullanılmak istenirse ilgili ödeme aracı için installmentPlan değişkenine count=1 olarak bilgi eklenir. Bu değerin son iki hanesi kuruşu ifade eder.	
+        //     'amount' => 10, // 10.00 TRY Sales amount for the relevant installment number. If different prices are to be used for different payment instruments, information is added to the installmentPlan variable with count=1 for the relevant payment instrument. The last two digits of this value represent the cents.
         // )
     )
 ); 
@@ -49,7 +49,7 @@ if ($response->isSuccessful()) {
         echo '<script type="text/javascript">';
         echo 'setTimeout(function() {';
         echo 'var paymentWindow = window.open("_self", "_self");';
-        echo 'paymentWindow.location.href = "' . $response->getTrackingUrl() . '";';
+        echo '// paymentWindow.location.href = "' . $response->getTrackingUrl() . '";';
         echo '}, 1000);';        
         echo '</script>';
     } else {

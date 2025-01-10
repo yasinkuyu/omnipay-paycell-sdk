@@ -25,3 +25,7 @@ if ($response->isSuccessful()) {
 } else {
     echo "Reverse fail: " . $response->getMessage();
 }
+
+
+echo "\nReverse Response Raw Data:\n";
+print_r($response->getData());

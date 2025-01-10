@@ -28,3 +28,6 @@ if ($response->isSuccessful()) {
 } else {
     echo "Refund fail: " . $response->getMessage();
 }
+
+echo "\nRefund Response Raw Data:\n";
+print_r($response->getData());
