@@ -153,6 +153,7 @@ abstract class PaycellService extends AbstractRequest
 echo $url;
 echo PHP_EOL;
 print_r($data);
+
         curl_setopt_array($curl, [
             CURLOPT_URL => $url,
             CURLOPT_RETURNTRANSFER => true,

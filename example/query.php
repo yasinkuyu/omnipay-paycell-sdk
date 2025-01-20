@@ -4,9 +4,12 @@ require 'init.php';
 
 $paymentReferenceNumber = $_GET['paymentReferenceNumber'];
 
+$gateway->setMsisdn("905355106190");
+
 $response = $gateway->query([
     'originalPaymentReferenceNumber' => $paymentReferenceNumber,
 ])->send();
+
 
 if ($response->isSuccessful()) {
 

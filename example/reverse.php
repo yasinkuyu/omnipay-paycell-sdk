@@ -2,7 +2,7 @@
 
 require 'init.php';
 
-$gateway->setOriginalReferenceNumber("00120250110073942398");
+$gateway->setOriginalReferenceNumber("00120250120133527000");
 $gateway->setMsisdn("905355106190");
 
 $response = $gateway->reverse()->send();

@@ -2,11 +2,11 @@
 
 require 'init.php';
 
-$gateway->setOriginalReferenceNumber("00120250110073942398");
+$gateway->setOriginalReferenceNumber("00120250120132808000");
 $gateway->setMsisdn("905355106190");
 
 $response = $gateway->refund([
-    'amount' => '10.00',
+    'amount' => '1.00',
     'currency' => 'TRY',
 ])->send();
 
