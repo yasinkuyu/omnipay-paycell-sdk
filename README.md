@@ -158,10 +158,36 @@ For test credit cards, visit: https://paycell.com.tr/test-kredi-kartlari
 
 For detailed integration information and API documentation, please visit [Paycell SDK Documentation](https://paycell.com.tr/paycell-sdk).
 
-## Paycell API
-
-- [Paycell API](https://github.com/yasinkuyu/omnipay-paycell)
-
 ## License
 
 The MIT License (MIT). Please see [License File](LICENSE) for more information.
+
+## Other Omnipay Packages
+
+Here are some other Omnipay payment gateway implementations developed by the same author:
+
+- **[Omnipay: NestPay](https://github.com/yasinkuyu/omnipay-nestpay)**  
+  NestPay (İş Bankası, Akbank, Finansbank, Denizbank, Kuveyt Türk, Halkbank, Anadolubank, ING Bank, Citibank, Cardplus, Ziraat Bankası, Tekstilbank, Şekerbank, Türk Ekonomi Bankası) gateway for Omnipay payment processing library.
+
+- **[Omnipay: Paycell API](https://github.com/yasinkuyu/omnipay-paycell)**  
+  Turkcell Paycell API gateway for Omnipay payment processing library.
+
+- **[Omnipay: Iyzico](https://github.com/yasinkuyu/omnipay-iyzico)**  
+  Iyzico payment gateway for Omnipay payment processing library.
+
+- **[Omnipay: Paratika](https://github.com/yasinkuyu/omnipay-paratika)**  
+  Paratika (Asseco) payment gateway for Omnipay payment processing library.
+
+- **[Omnipay: Posnet](https://github.com/yasinkuyu/omnipay-posnet)**  
+  Yapı Kredi Posnet payment gateway for Omnipay payment processing library.
+
+- **[Omnipay: GVP](https://github.com/yasinkuyu/omnipay-gvp)**  
+  Garanti Virtual POS (GVP) payment gateway for Omnipay payment processing library.
+
+- **[Omnipay: BKM Express](https://github.com/yasinkuyu/omnipay-bkm)**  
+  BKM Express payment gateway for Omnipay payment processing library.
+
+- **[Omnipay: PayTR](https://github.com/yasinkuyu/omnipay-paytr)**  
+  PayTR payment gateway for Omnipay payment processing library.
+
+For more information and documentation, visit the respective GitHub repositories.
