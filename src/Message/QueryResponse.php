@@ -118,6 +118,11 @@ class QueryResponse extends AbstractResponse
         return $this->data->retryStatusDescription ?? null;
     }
 
+    public function getRetryStatusCode()
+    {
+        return $this->data->retryStatusCode ?? null;
+    }
+
     /**
      * Get the status.
      *
