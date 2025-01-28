@@ -16,16 +16,24 @@ if ($response->isSuccessful()) {
 
     echo "Refund Successful" . PHP_EOL;
 
-    echo "getTransactionId: " . $response->getTransactionId() . PHP_EOL;
-    echo "getMessage: " . $response->getMessage() . PHP_EOL;
 
-    echo "getRetryStatusDescription: " . $response->getRetryStatusDescription() . PHP_EOL;
-    echo "getReconciliationDate: " . $response->getReconciliationDate() . PHP_EOL;
-    echo "getRetryStatusCode: " . $response->getRetryStatusCode() . PHP_EOL;
+    echo "getMessage: " . $response->getResponseDescription() . PHP_EOL;
+    echo "getTransactionId: " . $response->getTransactionId() . PHP_EOL;
+
     echo "getApprovalCode: " . $response->getApprovalCode() . PHP_EOL;
+    echo "getPaymentReferenceNumber: " . $response->getPaymentReferenceNumber() . PHP_EOL;
+    echo "getPaymentDate: " . $response->getPaymentDate() . PHP_EOL;
+    echo "getStatus: " . $response->getStatus() . PHP_EOL;
+    echo "getResponseCode: " . $response->getResponseCode() . PHP_EOL;
+
+
 
 } else {
-    echo "Refund fail: " . $response->getMessage();
+    echo "Refund fail: ";
+    echo "<br>";
+
+    echo "getResponseDescription: " . $response->getResponseDescription() . PHP_EOL;
+    echo "getResponseCode: " . $response->getResponseCode() . PHP_EOL;
 }
 
 echo "\nRefund Response Raw Data:\n";

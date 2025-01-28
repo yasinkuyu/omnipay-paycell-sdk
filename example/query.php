@@ -6,8 +6,6 @@ $paymentReferenceNumber = $_GET['paymentReferenceNumber'];
 
 $gateway->setMsisdn("905355106190");
 
-sleep(5); # Wait for 5 seconds to simulate a delay
-
 $response = $gateway->query([
     'originalPaymentReferenceNumber' => $paymentReferenceNumber,
 ])->send();
@@ -15,23 +13,33 @@ $response = $gateway->query([
 
 if ($response->isSuccessful()) {
 
-    echo "Query Successful" . PHP_EOL;
+    echo "Query Successful <br>";
 
-    echo "ReferenceNumber: " . $gateway->getReferenceNumber() . PHP_EOL;
+    echo "<br>";
 
-    echo "getMessage: " . $response->getMessage() . PHP_EOL;
+    echo "getMessage: " . $response->getResponseDescription() . PHP_EOL;
     echo "getTransactionId: " . $response->getTransactionId() . PHP_EOL;
 
-    echo "getExtraParameters: " . $response->getExtraParameters() . PHP_EOL;
-    echo "getCurrentStep: " . $response->getCurrentStep() . PHP_EOL;
-    echo "getMdErrorMessage: " . $response->getMdErrorMessage() . PHP_EOL;
-    echo "getMdStatus: " . $response->getMdStatus() . PHP_EOL;
-    echo "getThreeDResult: " . $response->getThreeDResult() . PHP_EOL;
-    echo "getThreeDResultDescription: " . $response->getThreeDResultDescription() . PHP_EOL;
+    echo "getApprovalCode: " . $response->getApprovalCode() . PHP_EOL;
+    echo "getPaymentReferenceNumber: " . $response->getPaymentReferenceNumber() . PHP_EOL;
+    echo "getPaymentDate: " . $response->getPaymentDate() . PHP_EOL;
+    echo "getStatus: " . $response->getStatus() . PHP_EOL;
+    echo "getResponseCode: " . $response->getResponseCode() . PHP_EOL;
 
+    echo "<br>";
+
+    echo "Refund payment: <br>";
+    echo "<a target='_blank' href='refund.php?paymentReferenceNumber=" . $response->getPaymentReferenceNumber() . "'>Refund</a><br>";
+    
+    echo "Reverse payment: <br>";
+    echo "<a target='_blank' href='reverse.php?paymentReferenceNumber=" . $response->getPaymentReferenceNumber() . "'>Reverse</a><br>";
 
 } else {
     echo "Query fail: " . $response->getMessage() . PHP_EOL;
+    echo "<br>";
+
+    echo "getResponseDescription: " . $response->getResponseDescription() . PHP_EOL;
+    echo "getResponseCode: " . $response->getResponseCode() . PHP_EOL;
 }
 
 echo "\nQuery Response Raw Data:\n";

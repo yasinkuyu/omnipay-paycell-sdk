@@ -22,7 +22,11 @@ if ($response->isSuccessful()) {
     echo "getApprovalCode: " . $response->getApprovalCode() . PHP_EOL;
 
 } else {
-    echo "Reverse fail: " . $response->getMessage();
+    echo "Reverse fail: ";
+    echo "<br>";
+
+    echo "getResponseDescription: " . $response->getResponseDescription() . PHP_EOL;
+    echo "getResponseCode: " . $response->getResponseCode() . PHP_EOL;
 }
 
 

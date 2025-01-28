@@ -31,6 +31,6 @@ class QueryRequest extends AbstractRequest
 
     protected function createResponse($data)
     {
-        return $this->response = new TransactionResponse($this, $data);
+        return $this->response = new QueryResponse($this, $data);
     }
 }

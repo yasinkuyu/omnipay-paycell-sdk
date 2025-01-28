@@ -44,12 +44,13 @@ if ($response->isSuccessful()) {
     echo "trackingUrl: " . $response->getTrackingUrl() . PHP_EOL;
     echo "status: " . $response->getStatus() . PHP_EOL;
 
+    // Handle the redirect 
     if ($response->getTrackingUrl()) {
         echo '<script type="text/javascript">';
         echo 'setTimeout(function() {';
         echo 'var paymentWindow = window.open("_self", "_self");';
-        echo '// paymentWindow.location.href = "' . $response->getTrackingUrl() . '";';
-        echo '}, 1000);';        
+        echo ' paymentWindow.location.href = "' . $response->getTrackingUrl() . '";';
+        echo '}, 3000);';        
         echo '</script>';
     } else {
         echo "Tracking URL not available" . PHP_EOL;
