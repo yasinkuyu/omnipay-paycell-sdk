@@ -113,6 +113,11 @@ class QueryResponse extends AbstractResponse
         return $this->data->reconciliationDate ?? null;
     }
 
+    public function getRetryStatusDescription()
+    {
+        return $this->data->retryStatusDescription ?? null;
+    }
+
     /**
      * Get the status.
      *
