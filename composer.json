@@ -2,7 +2,7 @@
     "name": "yasinkuyu/omnipay-paycell-sdk",
     "type": "library",
     "description": "Turkcell Paycell SDK gateway for Omnipay payment processing library",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "keywords": [
         "paycell",
         "paycell sdk",
