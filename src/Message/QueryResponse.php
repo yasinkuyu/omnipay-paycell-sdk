@@ -110,7 +110,7 @@ class QueryResponse extends AbstractResponse
      */
     public function getReconciliationDate()
     {
-        return $this->data->reconcilationDate ?? null;
+        return $this->data->reconciliationDate ?? null;
     }
 
     /**
