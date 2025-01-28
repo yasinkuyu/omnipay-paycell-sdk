@@ -2,6 +2,8 @@
 
 require 'init.php';
 
+$paymentReferenceNumber = $_GET['paymentReferenceNumber'];
+
 $gateway->setOriginalReferenceNumber("00120250120133527000");
 $gateway->setMsisdn("905355106190");
 

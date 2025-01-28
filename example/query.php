@@ -6,6 +6,8 @@ $paymentReferenceNumber = $_GET['paymentReferenceNumber'];
 
 $gateway->setMsisdn("905355106190");
 
+sleep(5); # Wait for 5 seconds to simulate a delay
+
 $response = $gateway->query([
     'originalPaymentReferenceNumber' => $paymentReferenceNumber,
 ])->send();
