@@ -10,6 +10,8 @@ use Omnipay\PaycellSDK\Message\ReverseRequest;
 use Omnipay\PaycellSDK\Message\Purchase3DRequest;
 use Omnipay\PaycellSDK\Message\Purchase3DCompleteRequest;
 use Omnipay\PaycellSDK\Message\QueryRequest;
+use Omnipay\PaycellSDK\Message\SummaryRequest;
+
 /**
  * Paycell Gateway
  * 
@@ -79,5 +81,15 @@ class Gateway extends AbstractGateway
     {
         return $this->createRequest(QueryRequest::class, $parameters);
     }   
+
+    /**
+     * Initiate a summary request.
+     *
+     * @return \Omnipay\Common\Message\AbstractRequest
+     */
+    public function summary(array $parameters = [])
+    {
+        return $this->createRequest(SummaryRequest::class, $parameters);
+    }
 
 }

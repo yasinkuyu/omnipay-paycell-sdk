@@ -13,28 +13,28 @@ $response = $gateway->refund([
 ])->send();
 
 if ($response->isSuccessful()) {
-
     echo "Refund Successful" . PHP_EOL;
-
-
-    echo "getMessage: " . $response->getResponseDescription() . PHP_EOL;
-    echo "getTransactionId: " . $response->getTransactionId() . PHP_EOL;
-
-    echo "getApprovalCode: " . $response->getApprovalCode() . PHP_EOL;
-    echo "getPaymentReferenceNumber: " . $response->getPaymentReferenceNumber() . PHP_EOL;
-    echo "getPaymentDate: " . $response->getPaymentDate() . PHP_EOL;
-    echo "getStatus: " . $response->getStatus() . PHP_EOL;
-    echo "getResponseCode: " . $response->getResponseCode() . PHP_EOL;
-
-
-
-} else {
-    echo "Refund fail: ";
     echo "<br>";
 
+    echo "getResponseDescription: " . $response->getResponseDescription() . PHP_EOL;
+    echo "getTransactionId: " . $response->getTransactionId() . PHP_EOL;
+    echo "getResponseCode: " . $response->getResponseCode() . PHP_EOL;
+
+    echo "getReconciliationDate: " . $response->getReconciliationDate() . PHP_EOL;
+    echo "getRetryStatusDescription: " . $response->getRetryStatusDescription() . PHP_EOL;
+    echo "getApprovalCode: " . $response->getApprovalCode() . PHP_EOL;
+    echo "getRetryStatusCode: " . $response->getRetryStatusCode() . PHP_EOL;
+} else {
+    echo "Refund fail: ". PHP_EOL;
+    echo "<br>";
+    
     echo "getResponseDescription: " . $response->getResponseDescription() . PHP_EOL;
     echo "getResponseCode: " . $response->getResponseCode() . PHP_EOL;
 }
 
-echo "\nRefund Response Raw Data:\n";
+echo "<br>";
+echo "<details><summary>Refund Response Raw Data</summary>";
+echo "<pre class='raw_data'><code>";
 print_r($response->getData());
+echo "</code></pre>";
+echo "</details>";

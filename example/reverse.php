@@ -4,31 +4,31 @@ require 'init.php';
 
 $paymentReferenceNumber = $_GET['paymentReferenceNumber'];
 
-$gateway->setOriginalReferenceNumber("00120250120133527000");
+$gateway->setOriginalReferenceNumber($paymentReferenceNumber);
 $gateway->setMsisdn("905355106190");
 
 $response = $gateway->reverse()->send();
 
 if ($response->isSuccessful()) {
-
     echo "Reverse Successful" . PHP_EOL;
-
+    echo "<br>";
+    echo "getResponseDescription: " . $response->getResponseDescription() . PHP_EOL;
     echo "getTransactionId: " . $response->getTransactionId() . PHP_EOL;
-    echo "getMessage: " . $response->getMessage() . PHP_EOL;
+    echo "getResponseCode: " . $response->getResponseCode() . PHP_EOL;
 
-    echo "getRetryStatusDescription: " . $response->getRetryStatusDescription() . PHP_EOL;
     echo "getReconciliationDate: " . $response->getReconciliationDate() . PHP_EOL;
-    echo "getRetryStatusCode: " . $response->getRetryStatusCode() . PHP_EOL;
     echo "getApprovalCode: " . $response->getApprovalCode() . PHP_EOL;
-
 } else {
-    echo "Reverse fail: ";
+    echo "Reverse fail: " . PHP_EOL;
     echo "<br>";
 
     echo "getResponseDescription: " . $response->getResponseDescription() . PHP_EOL;
     echo "getResponseCode: " . $response->getResponseCode() . PHP_EOL;
 }
 
-
-echo "\nReverse Response Raw Data:\n";
+echo "<br>";
+echo "<details><summary>Reverse Response Raw Data</summary>";
+echo "<pre class='raw_data'><code>";
 print_r($response->getData());
+echo "</code></pre>";
+echo "</details>";

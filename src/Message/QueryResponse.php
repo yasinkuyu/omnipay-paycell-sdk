@@ -176,4 +176,189 @@ class QueryResponse extends AbstractResponse
     {
         return $this->data->refundedAmount ?? null;
     }
+
+    /**
+     * Get the acquirer bank code.
+     *
+     * @return string|null
+     */
+    public function getAcquirerBankCode()
+    {
+        return $this->data->acquirerbankCode ?? null;
+    }
+
+    /**
+     * Get the MSISDN (phone number).
+     *
+     * @return string|null
+     */
+    public function getMsisdn()
+    {
+        return $this->data->msisdn ?? null;
+    }
+
+    /**
+     * Get the installment count.
+     *
+     * @return int|null
+     */
+    public function getInstallmentCount()
+    {
+        return $this->data->installmentCount ?? null;
+    }
+
+    /**
+     * Get the order ID.
+     *
+     * @return string|null
+     */
+    public function getOrderId()
+    {
+        return $this->data->orderId ?? null;
+    }
+
+    /**
+     * Get the payment security type.
+     *
+     * @return string|null
+     */
+    public function getPaymentSecurity()
+    {
+        return $this->data->paymentSecurity ?? null;
+    }
+
+    /**
+     * Get the issuer bank code.
+     *
+     * @return string|null
+     */
+    public function getIssuerBankCode()
+    {
+        return $this->data->issuerBankCode ?? null;
+    }
+
+    /**
+     * Get the amount without HP.
+     *
+     * @return float|null
+     */
+    public function getAmountWithoutHP()
+    {
+        return $this->data->amountWithoutHP ?? null;
+    }
+
+    /**
+     * Get the used HP amount.
+     *
+     * @return float|null
+     */
+    public function getUsedHPAmount()
+    {
+        return $this->data->usedHPAmount ?? null;
+    }
+
+    /**
+     * Get the earned HP amount.
+     *
+     * @return float|null
+     */
+    public function getEarnedHPAmount()
+    {
+        return $this->data->earnedHPAmount ?? null;
+    }
+
+    /**
+     * Get the without HP amount.
+     *
+     * @return float|null
+     */
+    public function getWithoutHPAmount()
+    {
+        return $this->data->withoutHPAmount ?? null;
+    }
+
+    /**
+     * Get the reconciliation result.
+     *
+     * @return float|null
+     */
+    public function getReconciliationResult()
+    {
+        return $this->data->reconciliationResult ?? null;
+    }
+ 
+    public function getTotalSaleAmount()
+    {
+        return $this->data->totalSaleAmount ?? null;
+    }
+
+    public function getTotalReverseAmount()
+    {
+        return $this->data->totalReverseAmount ?? null;
+    }
+
+    public function getTotalRefundAmount()
+    {
+        return $this->data->totalRefundAmount ?? null;
+    }
+
+    public function getTotalPreAuthAmount()
+    {
+        return $this->data->totalPreAuthAmount ?? null;
+    }
+
+    public function getTotalPostAuthAmount()
+    {
+        return $this->data->totalPostAuthAmount ?? null;
+    }
+
+    public function getTotalPreAuthReverseAmount()
+    {
+        return $this->data->totalPreAuthReverseAmount ?? null;
+    }
+
+    public function getTotalPostAuthReverseAmount()
+    {
+        return $this->data->totalPostAuthReverseAmount ?? null;
+    }
+
+    public function getTotalSaleCount()
+    {
+        return $this->data->totalSaleCount ?? null;
+    }
+
+    public function getTotalReverseCount()
+    {
+        return $this->data->totalReverseCount ?? null;
+    }
+
+    public function getTotalRefundCount()
+    {
+        return $this->data->totalRefundCount ?? null;
+    }
+
+    public function getTotalPreAuthCount()
+    {
+        return $this->data->totalPreAuthCount ?? null;
+    }
+
+    public function getTotalPostAuthCount()
+    {
+        return $this->data->totalPostAuthCount ?? null;
+    }
+
+    public function getTotalPreAuthReverseCount()
+    {
+        return $this->data->totalPreAuthReverseCount ?? null;
+    }
+
+    public function getTotalPostAuthReverseCount()
+    {
+        return $this->data->totalPostAuthReverseCount ?? null;
+    }
+
+    public function getExtraParameters()
+    {
+        return $this->data->extraParameters ?? null;
+    }
 }

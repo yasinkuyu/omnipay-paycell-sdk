@@ -9,6 +9,13 @@
         font-weight: bold;
         display: inline;
     }
+    .raw_data {
+        background-color: #f0f0f0;
+        padding: 10px;
+        border-radius: 5px;
+        font-size: 11px;
+        font-family: monospace;
+    }
 </style>
 
 <?php 

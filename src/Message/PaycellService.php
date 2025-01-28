@@ -291,6 +291,42 @@ abstract class PaycellService extends AbstractRequest
     }
 
     /**
+     * Get summary reconciliation.
+     *
+     * @return mixed
+     */
+    public function summary(array $data)
+    {
+        $this->requestData = [
+            "requestHeader" => [
+                "applicationName" => $this->getApplicationName(),
+                "applicationPwd" => $this->getApplicationPwd(),
+                "clientIPAddress" => $this->getClientIPAddress(),
+                "transactionDateTime" => $this->getTransactionDateTime(),
+                "transactionId" => $this->getTransactionId(),
+            ],
+            "reconciliationDate" => $this->getReconciliationDate(),
+            "merchantCode" => $this->getMerchantCode(),
+            "totalSaleAmount" => $this->getTotalSaleAmount(),
+            "totalReverseAmount" => $this->getTotalReverseAmount(),
+            "totalRefundAmount" => $this->getTotalRefundAmount(),
+            "totalPreAuthAmount" => $this->getTotalPreAuthAmount(),
+            "totalPostAuthAmount" => $this->getTotalPostAuthAmount(),
+            "totalPostAuthReverseAmount" => $this->getTotalPostAuthReverseAmount(),
+            "totalSaleCount" => $this->getTotalSaleCount(),
+            "totalReverseCount" => $this->getTotalReverseCount(),
+            "totalRefundCount" => $this->getTotalRefundCount(),
+            "totalPreAuthCount" => $this->getTotalPreAuthCount(),
+            "totalPostAuthCount" => $this->getTotalPostAuthCount(),
+            "totalPreAuthReverseCount" => $this->getTotalPreAuthReverseCount(),
+            "totalPostAuthReverseCount" => $this->getTotalPostAuthReverseCount(),
+        ];
+
+        return $this->sendRequestPayment('summaryReconciliation/', $data);
+    }
+ 
+
+    /**
      * Query a payment.
      *
      * @param array $data
@@ -314,14 +350,4 @@ abstract class PaycellService extends AbstractRequest
         return $this->sendRequestPayment('queryPaymentStatus/', $data);
     }
 
-    /**
-     * Get summary reconciliation.
-     *
-     * @return mixed
-     */
-    public function summaryReconciliation()
-    {
-        return $this->sendRequestPayment('summaryReconciliation/');
-    }
- 
 }

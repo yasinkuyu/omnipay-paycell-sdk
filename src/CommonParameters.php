@@ -90,6 +90,27 @@ trait CommonParameters
     }
 
     /**
+     * Get the reconciliation date.
+     * Summary service 
+     * @return mixed
+     */
+    public function getReconciliationDate()
+    {
+        return $this->getParameter('reconciliationDate');
+    }
+
+    /**
+     * Set the reconciliation date.
+     *
+     * @param mixed $value The reconciliation date value
+     * @return $this
+     */
+    public function setReconciliationDate($value)
+    {
+        return $this->setParameter('reconciliationDate', $value);
+    }
+
+    /**
     * Set the trackingUrl.
     *
     * @param mixed $value The trackingUrl value
@@ -492,7 +513,7 @@ trait CommonParameters
      * Set the referance number.
      * 
      * Üye işyeri uygulaması tarafından üretilecek unique numerik işlem referans numarası değeridir. 
-     * İlk 3 hanesi uygulama bazında unique’dir, bu değer entegrasyon aşamasında Paycell tarafından bildirilecektir.
+     * İlk 3 hanesi uygulama bazında unique'dir, bu değer entegrasyon aşamasında Paycell tarafından bildirilecektir.
      *
      * @param mixed $value The referance number value
      * @return $this
@@ -518,7 +539,7 @@ trait CommonParameters
     /**
      * Set the original referance number.
      * 
-     * İade edilecek işlemin “referenceNumber” değeridir.
+     * İade edilecek işlemin "referenceNumber" değeridir.
      * 
      * @param mixed $value The origianl referance number value
      * @return $this
@@ -562,7 +583,7 @@ trait CommonParameters
     /**
      * Set the merchant code.
      * 
-     * Ödeme işleminin başlatıldığı Paycell’de tanımlı üye işyeri kodu bilgisi gönderilir. 
+     * Ödeme işleminin başlatıldığı Paycell'de tanımlı üye işyeri kodu bilgisi gönderilir. 
      * Entegrasyon sonrasında her tanımlanan yeni üye işyeri için Paycell tarafından merchantCode değeri paylaşılır.
      *
      * @param mixed $value The merchant code value
@@ -690,6 +711,279 @@ trait CommonParameters
     public function getAcquirerBankCode()
     {
         return $this->getParameter('acquirerBankCode');
+    }
+
+    /**
+     * Get the total sale amount.
+     *
+     * @return string|null
+     */
+    public function getTotalSaleAmount()
+    {
+        return $this->getParameter('totalSaleAmount');
+    }
+
+    /**
+     * Set the total sale amount.
+     *
+     * @param string $value
+     * @return $this
+     */
+    public function setTotalSaleAmount($value)
+    {
+        return $this->setParameter('totalSaleAmount', $value);
+    }
+
+    /**
+     * Get the total reverse amount.
+     *
+     * @return string|null
+     */
+    public function getTotalReverseAmount()
+    {
+        return $this->getParameter('totalReverseAmount');
+    }
+
+    /**
+     * Set the total reverse amount.
+     *
+     * @param string $value
+     * @return $this
+     */
+    public function setTotalReverseAmount($value)
+    {
+        return $this->setParameter('totalReverseAmount', $value);
+    }
+
+    /**
+     * Get the total refund amount.
+     *
+     * @return string|null
+     */
+    public function getTotalRefundAmount()
+    {
+        return $this->getParameter('totalRefundAmount');
+    }
+
+    /**
+     * Set the total refund amount.
+     *
+     * @param string $value
+     * @return $this
+     */
+    public function setTotalRefundAmount($value)
+    {
+        return $this->setParameter('totalRefundAmount', $value);
+    }
+
+    /**
+     * Get the total pre-auth amount.
+     *
+     * @return string|null
+     */
+    public function getTotalPreAuthAmount()
+    {
+        return $this->getParameter('totalPreAuthAmount');
+    }
+
+    /**
+     * Set the total pre-auth amount.
+     *
+     * @param string $value
+     * @return $this
+     */
+    public function setTotalPreAuthAmount($value)
+    {
+        return $this->setParameter('totalPreAuthAmount', $value);
+    }
+
+    /**
+     * Get the total post-auth amount.
+     *
+     * @return string|null
+     */
+    public function getTotalPostAuthAmount()
+    {
+        return $this->getParameter('totalPostAuthAmount');
+    }
+
+    /**
+     * Set the total post-auth amount.
+     *
+     * @param string $value
+     * @return $this
+     */
+    public function setTotalPostAuthAmount($value)
+    {
+        return $this->setParameter('totalPostAuthAmount', $value);
+    }
+
+    /**
+     * Get the total post-auth reverse amount.
+     *
+     * @return string|null
+     */
+    public function getTotalPostAuthReverseAmount()
+    {
+        return $this->getParameter('totalPostAuthReverseAmount');
+    }
+
+    /**
+     * Set the total post-auth reverse amount.
+     *
+     * @param string $value
+     * @return $this
+     */
+    public function setTotalPostAuthReverseAmount($value)
+    {
+        return $this->setParameter('totalPostAuthReverseAmount', $value);
+    }
+
+    /**
+     * Get the total sale count.
+     *
+     * @return int|null
+     */
+    public function getTotalSaleCount()
+    {
+        return $this->getParameter('totalSaleCount');
+    }
+
+    /**
+     * Set the total sale count.
+     *
+     * @param int $value
+     * @return $this
+     */
+    public function setTotalSaleCount($value)
+    {
+        return $this->setParameter('totalSaleCount', $value);
+    }
+
+    /**
+     * Get the total reverse count.
+     *
+     * @return int|null
+     */
+    public function getTotalReverseCount()
+    {
+        return $this->getParameter('totalReverseCount');
+    }
+
+    /**
+     * Set the total reverse count.
+     *
+     * @param int $value
+     * @return $this
+     */
+    public function setTotalReverseCount($value)
+    {
+        return $this->setParameter('totalReverseCount', $value);
+    }
+
+    /**
+     * Get the total refund count.
+     *
+     * @return int|null
+     */
+    public function getTotalRefundCount()
+    {
+        return $this->getParameter('totalRefundCount');
+    }
+
+    /**
+     * Set the total refund count.
+     *
+     * @param int $value
+     * @return $this
+     */
+    public function setTotalRefundCount($value)
+    {
+        return $this->setParameter('totalRefundCount', $value);
+    }
+
+    /**
+     * Get the total pre-auth count.
+     *
+     * @return int|null
+     */
+    public function getTotalPreAuthCount()
+    {
+        return $this->getParameter('totalPreAuthCount');
+    }
+
+    /**
+     * Set the total pre-auth count.
+     *
+     * @param int $value
+     * @return $this
+     */
+    public function setTotalPreAuthCount($value)
+    {
+        return $this->setParameter('totalPreAuthCount', $value);
+    }
+
+    /**
+     * Get the total post-auth count.
+     *
+     * @return int|null
+     */
+    public function getTotalPostAuthCount()
+    {
+        return $this->getParameter('totalPostAuthCount');
+    }
+
+    /**
+     * Set the total post-auth count.
+     *
+     * @param int $value
+     * @return $this
+     */
+    public function setTotalPostAuthCount($value)
+    {
+        return $this->setParameter('totalPostAuthCount', $value);
+    }
+
+    /**
+     * Get the total pre-auth reverse count.
+     *
+     * @return int|null
+     */
+    public function getTotalPreAuthReverseCount()
+    {
+        return $this->getParameter('totalPreAuthReverseCount');
+    }
+
+    /**
+     * Set the total pre-auth reverse count.
+     *
+     * @param int $value
+     * @return $this
+     */
+    public function setTotalPreAuthReverseCount($value)
+    {
+        return $this->setParameter('totalPreAuthReverseCount', $value);
+    }
+
+    /**
+     * Get the total post-auth reverse count.
+     *
+     * @return int|null
+     */
+    public function getTotalPostAuthReverseCount()
+    {
+        return $this->getParameter('totalPostAuthReverseCount');
+    }
+
+    /**
+     * Set the total post-auth reverse count.
+     *
+     * @param int $value
+     * @return $this
+     */
+    public function setTotalPostAuthReverseCount($value)
+    {
+        return $this->setParameter('totalPostAuthReverseCount', $value);
     }
 
 }
